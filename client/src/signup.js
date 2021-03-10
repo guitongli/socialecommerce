@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from './axios';
 import ErrorMsg from './error';
-import { Link, Router} from 'react-router-dom';
+import { Link, Router } from 'react-router-dom';
 
 // function ErrorMsg {
 //         return <p>check your info and type again</p>;
@@ -21,6 +21,7 @@ export default class Signup extends React.Component {
 
     handleClick(e) {
         console.log(this.state);
+        e.preventDefault();
         axios
             .post('/signup', this.state)
             .then(result => {
@@ -48,22 +49,16 @@ export default class Signup extends React.Component {
                 <ErrorMsg error={toggle} />
                 <h1> to the antisocial network.</h1>
 
-                <form id="signup" method="post" action="/signup">
-                    <input name="firstname" type="text" placeholder="firstname" onChange={e => this.handleChange(e)} />
-                    <input name="lastname" type="text" placeholder="lastname" onChange={e => this.handleChange(e)} />
-                    <input name="email" type="email" placeholder="email" onChange={e => this.handleChange(e)} />
+                <input name="firstname" type="text" placeholder="firstname" onChange={e => this.handleChange(e)} />
+                <input name="lastname" type="text" placeholder="lastname" onChange={e => this.handleChange(e)} />
+                <input name="email" type="email" placeholder="email" onChange={e => this.handleChange(e)} />
 
-                    <input
-                        name="password"
-                        type="password"
-                        placeholder="password"
-                        onChange={e => this.handleChange(e)}
-                    />
-                    <input type="submit" onClick={e => this.handleClick()} value="submit" />
-                </form>
-              
+                <input name="password" type="password" placeholder="password" onChange={e => this.handleChange(e)} />
+                <button onClick={e => this.handleClick()} value="submit">
+                    hihi
+                </button>
+
                 <Link to="/login">Click here to Log in!</Link>
-                
             </div>
         );
     }
