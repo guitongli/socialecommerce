@@ -5,8 +5,8 @@ const path = require('path');
 
 const db = require('./db');
 const cookieSession = require('cookie-session');
-const bc = require('./bc.js');
-const csurf = require('csurf');
+const { hash, compare } = require("./bc");
+const csrf = require('csurf');
 const cryptoRandomString = require('crypto-random-string');
 const secretCode = cryptoRandomString({
     length: 6
@@ -19,17 +19,7 @@ const secretCode = cryptoRandomString({
 //     checkNotSigned,
 //     checkSigned,
 // } = require("./middleware");
-
-// let cookie_sec;
-// app.use(csurf());
-
-// app.use(function(req, res, next){
-//     res.cookie('mytoken', req.csrfToken());
-//     next();
-// });
-
-// var csrfProtection = csurf();
-
+let cookie_sec;
 if (process.env.COOKIE_SECRET) {
     cookie_sec = process.env.COOKIE_SECRET;
 } else {
@@ -43,6 +33,18 @@ app.use(
         secure: false
     })
 );
+app.use(csrf());
+
+app.use(function(req, res, next){
+    res.cookie('mytoken', req.csrfToken());
+    next();
+});
+
+
+// var csrfProtection = csurf();
+
+
+
 app.use(express.json());
 
 app.use(compression());
