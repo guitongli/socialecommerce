@@ -2,6 +2,7 @@ import React from 'react';
 import axios from './axios';
 import ErrorMsg from './error';
 import { Link, Router } from 'react-router-dom';
+import Verification from './verification';
 
 // function ErrorMsg {
 //         return <p>check your info and type again</p>;
@@ -47,6 +48,7 @@ export default class Signup extends React.Component {
         return (
             <div>
                 <ErrorMsg error={toggle} />
+                <Verification sent = {delivered}/>
                 <h1> to the antisocial network.</h1>
 
                 <input name="firstname" type="text" placeholder="firstname" onChange={e => this.handleChange(e)} />
