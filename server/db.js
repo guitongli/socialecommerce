@@ -16,7 +16,17 @@ module.exports.insertUser = (firstname, lastname, email, hashkeys) => {
 
     return db.query(q, params);
 };
-module.exports.insertPro = (age, city, url, statement, user_id) => {
+
+module.exports.checkId= (email) => {
+    const q = `SELECT * FROM users
+    WHERE email = $1; `;
+
+    const params = [email];
+
+    return db.query(q, params);
+};
+
+module.exports.insertCode = (age, city, url, statement, user_id) => {
     const q = `INSERT INTO userpro (age, city, url, statement, user_id)
     VALUES($1, $2, $3, $4, $5)
     RETURNING *;`;

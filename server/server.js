@@ -63,31 +63,31 @@ app.post('/signup', (req, res) => {
     const { firstname, lastname, password, email } = req.body;
     // req.session.csrfSecret = null;
     console.log(req.body);
-    // if (!firstname || !lastname || !password || !email) {
-    //     res.json({ error: true });
-    // } else {
-    //     hash(keys)
-    //         .then(hashedkeys => {
-    //             return db
-    //                 .insertUser(firstname, lastname, email, hashedkeys)
-    //                 .then(returns => {
-    //                     req.session.userID = returns.rows[0].id;
-    //                     var currentID = returns.rows[0].id;
-    //                     req.session.userID = currentID;
-    //                     res.json({success:true});
-    //                     res.end();
-    //                 })
-    //                 .catch(err => {
-    //                     console.log(err);
-    //                     res.json({success:false});
-    //                 });
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
+    if (!firstname || !lastname || !password || !email) {
+        res.json({ error: true });
+    } else {
+        hash(password)
+            .then(hashedkeys => {
+                return db
+                    .insertUser(firstname, lastname, email, hashedkeys)
+                    .then(returns => {
+                        req.session.userID = returns.rows[0].id;
+                        var currentID = returns.rows[0].id;
+                        req.session.userID = currentID;
+                        res.json({success:true});
+                        res.end();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.json({success:false});
+                    });
+            })
+            .catch(err => {
+                console.log(err);
                 
-    //             res.end();
-    //         });
-    // }
+                res.end();
+            });
+    }
 });
 
 app.post("/login", (req, res) => {
@@ -95,47 +95,17 @@ app.post("/login", (req, res) => {
     if (!email || !password) {
         res.json({success:false})
     } else {
-        db.getInfo(email)
+        db.checkID(email)
             .then((info) => {
                 const hashkeys = info.rows[0].hashkeys;
-                req.session.userID = info.rows[0].id;
-                currentID = info.rows[0].id;
-                console.log("loggedid", info.rows[0].id);
-                console.log(req.session.userID);
-                compare(keys, hashkeys)
+                
+                
+                compare(password, hashkeys)
                     .then((result) => {
-                        if (result == true) {
-                            db.getImg(info.rows[0].id)
-                                .then((signature) => {
-                                    console.log(
-                                        "verified",
-                                        req.session.userID,
-                                        info.rows[0].id
-                                    );
-                                    // res.redirect("/petition");
-                                    if (signature.rows[0].canvasimg) {
-                                        req.session.signature =
-                                            signature.rows[0].canvasimg;
-                                        console.log(
-                                            "sigeed id",
-                                            req.session.userID
-                                        );
-
-                                        res.redirect("/thanks");
-                                    } else {
-                                        res.redirect("/petition");
-                                    }
-                                })
-                                .catch((err) => {
-                                    console.log(err);
-                                    res.redirect("/petition");
-                                });
-                        } else {
-                            res.render("login", {
-                                layout: "forlogin",
-                                incomplete: true,
-                                csrfToken: req.csrfToken(),
-                            });
+                        if (result == true){
+                           req.session.userID = info.rows[0].id; 
+                           console.log(req.session);
+                           res.json({success:true})
                         }
                     })
                     .catch((err) => {

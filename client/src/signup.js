@@ -20,13 +20,13 @@ export default class Signup extends React.Component {
     }
 
     handleClick(e) {
-        console.log(this.state);
-        e.preventDefault();
+        
+        console.log(e);
         axios
             .post('/signup', this.state)
             .then(result => {
                 console.log(result);
-                location.reqplace('/');
+                location.replace('/');
             })
             .catch(err => {
                 console.log(err);
