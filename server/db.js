@@ -1,4 +1,4 @@
-const spicedPg = require("spiced-pg");
+const spicedPg = require('spiced-pg');
 let db;
 if (process.env.DATABASE_URL) {
     db = spicedPg(process.env.DATABASE_URL);
@@ -17,7 +17,31 @@ module.exports.insertUser = (firstname, lastname, email, hashkeys) => {
     return db.query(q, params);
 };
 
-module.exports.checkId= (email) => {
+module.exports.checkEmail = (email) => {
+    const q = `SELECT COUNT(1)
+FROM users
+WHERE email = $1;`;
+    const params = [email];
+    return db.query(q,params);
+};
+
+module.exports.getName = (email) => {
+    const q = `SELECT *
+FROM users
+WHERE email = $1;`;
+    const params = [email];
+    return db.query(q,params);
+};
+
+module.exports.getCode = (email) => {
+    const q = `SELECT *
+FROM codes
+WHERE email = $1;`;
+    const params = [email];
+    return db.query(q,params);
+};
+
+module.exports.checkUser = email => {
     const q = `SELECT * FROM users
     WHERE email = $1; `;
 
@@ -26,11 +50,24 @@ module.exports.checkId= (email) => {
     return db.query(q, params);
 };
 
-module.exports.insertCode = (age, city, url, statement, user_id) => {
-    const q = `INSERT INTO userpro (age, city, url, statement, user_id)
-    VALUES($1, $2, $3, $4, $5)
-    RETURNING *;`;
+module.exports.insertCode = (email, code) => {
+    const q = `
+    INSERT INTO codes (email, code)
+VALUES($1, $2)
+ON CONFLICT (email) 
+DO 
+   UPDATE SET code = $2;`;
 
-    const params = [age, city, url, statement, user_id];
+    const params = [email, code];
+    return db.query(q, params);
+};
+
+module.exports.updatePassword = (
+    email, hashkeys
+) => {
+    const q = `UPDATE users
+    SET hashkeys = $2
+    WHERE email = $1;`;
+    const params = [email, hashkeys];
     return db.query(q, params);
 };

@@ -1,24 +1,91 @@
 import React from 'react';
 import axios from './axios';
+import ErrorMsg from './error.js';
 
 export default class Verification extends React.Component {
-    constructor(props){
-        super(props);
-        this.state={
-            code:"",
-
+    constructor() {
+        super();
+        this.state = {
+            code: '',
+            email: '',
+            step: 1,
+            password: '',
+            password2: ''
         };
     }
 
-    codeCheck(e){
-        console.log(e.target.value);
-        this.setState({code: e.target.value});
-        axios.post('/reset', this.state).then((result)=>console.log(result)).catch(err => console.log(err));
+    sendCode() {
+        axios
+            .post('/verification/sendemail', this.state.email)
+            .then(result => {
+                if (result.data.success) {
+                    this.setState({ step: 2 });
+                }
+            })
+            .catch(err => console.log(err));
     }
-    render (){
-        return <div>
-            <h1>An email is on your way. Put in below the code you receive</h1>
-            <input type = 'text' placeholder = '6-digit code' name ='code' onChange ={e=> this.codeCheck()}></input>
-        </div>
+    codeCheck() {
+        axios
+            .post('/verification', this.state)
+            .then(result => {
+                if (result.data.success) {
+                    this.setState({ step: 3 });
+                }
+            })
+            .catch(err => console.log(err));
+    }
+    updatePassword() {
+        if (this.state.password == this.state.password2) {
+            axios.post('/verification/updatepassword', this.state).then(result => {
+                if (result.data.success) {  this.setState({ step: 3 });
+                }
+            });
+        }
+    }
+    handleChange(e) {
+        console.log(e.target.value);
+        this.setState({ [e.target.name]: e.target.value });
+    }
+    render() {
+        if (this.state.step == 1) {
+            return (
+                <div>
+                    {this.state.error && <ErrorMsg />}
+                    <h1> to the antisocial network.</h1>
+                    <h2>please tell us your email so that we can send a secret code to you</h2>
+                    <input name="email" type="email" placeholder="email" onChange={e => this.handleChange(e)} />
+                    <button onClick={() => this.sendCode()}>send me a code</button>
+                </div>
+            );
+        } else if (this.state.step == 2) {
+            return (
+                <div>
+                    <h1>An email is on your way. Put in below the code you receive</h1>
+                    <input type="text" placeholder="6-digit code" name="code" onChange={e => this.handleChange(e)} />
+                    <button onClick={() => this.codeCheck()}>confirm</button>
+                </div>
+            );
+        } else if (this.state.step == 3) {
+            return (
+                <div>
+                    <h1>Please decide a new password</h1>
+                    <input type="text" placeholder="password" name="password" onChange={e => this.handleChange(e)} />
+                    <input
+                        type="text"
+                        placeholder="repeat password"
+                        name="password2"
+                        onChange={e => this.handleChange(e)}
+                    />
+                    <button onClick={() => this.updatePassword()}>update</button>
+                </div>
+            );
+        } else if (this.state.step == 4) {
+            return (
+                <div>
+                    <h1>congrats! now </h1>
+                    <Link to="/login">Click here to Log in!</Link>
+                </div>
+            );
+        }
     }
 }

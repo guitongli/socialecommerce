@@ -2,10 +2,10 @@ const express = require('express');
 const app = express();
 const compression = require('compression');
 const path = require('path');
-
+const { s3Email, s3Upload } = require('./s3');
 const db = require('./db');
 const cookieSession = require('cookie-session');
-const { hash, compare } = require("./bc");
+const { hash, compare } = require('./bc');
 const csrf = require('csurf');
 const cryptoRandomString = require('crypto-random-string');
 const secretCode = cryptoRandomString({
@@ -35,15 +35,12 @@ app.use(
 );
 app.use(csrf());
 
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
     res.cookie('mytoken', req.csrfToken());
     next();
 });
 
-
 // var csrfProtection = csurf();
-
-
 
 app.use(express.json());
 
@@ -74,55 +71,103 @@ app.post('/signup', (req, res) => {
                         req.session.userID = returns.rows[0].id;
                         var currentID = returns.rows[0].id;
                         req.session.userID = currentID;
-                        res.json({success:true});
+                        res.json({ success: true });
                         res.end();
                     })
                     .catch(err => {
                         console.log(err);
-                        res.json({success:false});
+                        res.json({ success: false });
                     });
             })
             .catch(err => {
                 console.log(err);
-                
+
                 res.end();
             });
     }
 });
 
-app.post("/login", (req, res) => {
+app.post('/login', (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
-        res.json({success:false})
+        res.json({ success: false });
     } else {
-        db.checkID(email)
-            .then((info) => {
+        db
+            .checkUser(email)
+            .then(info => {
                 const hashkeys = info.rows[0].hashkeys;
-                
-                
+
                 compare(password, hashkeys)
-                    .then((result) => {
-                        if (result == true){
-                           req.session.userID = info.rows[0].id; 
-                           console.log(req.session);
-                           res.json({success:true})
+                    .then(result => {
+                        if (result == true) {
+                            req.session.userEmail = info.rows[0].email;
+                            console.log(req.session);
+                            res.redirect('/')
                         }
                     })
-                    .catch((err) => {
+                    .catch(err => {
                         console.log(err);
                     });
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
-                res.render("login", {
-                    layout: "forlogin",
+                res.render('login', {
+                    layout: 'forlogin',
                     nonexist: true,
-                    csrfToken: req.csrfToken(),
+                    csrfToken: req.csrfToken()
                 });
             });
     }
 });
 
+app.post('/verification/sendemail', (req, res) => {
+    console.log('sendemail', req.body);
+    db
+        .checkEmail(req.body.email)
+        .then(result => {
+            if (result.rows[0].count) {
+                db
+                    .getName(req.body.email)
+                    .then(result => {
+                        s3Email(result.rows[0].firstname, 'guitong.lee.contact@gmail.com', secretCode).then(result => {
+                            res.json({ success: true });
+                        });
+
+                        db.insertCode(req.body.email, secretCode).then(result => console.log(result));
+                    })
+                    .catch(err => res.json({ success: false }));
+            }
+        })
+        .catch(err => console.log(err));
+});
+app.post('/verification', (req, res) => {
+    console.log(req.body);
+    db.getCode(req.body.code).then(result => {
+        console.log(result);
+        if (result.rows[0].code == secretCode) {
+            res.json({ success: true });
+        }
+    });
+});
+
+app.post('/verification/updatepassword', (req, res) => {
+    hash(req.body.password).then(hashedkeys => {
+        return db
+            .updatePassword(req.body.email, hashedkeys)
+            .then(returns => {
+                res.json({ success: true });
+            })
+            .catch(err => {
+                console.log(err);
+                res.json({ success: false });
+            });
+    });
+});
+
+app.get('/', (req, res)=>{
+    console.log(req.session.userEmail);
+    db.getName(req.session.userEmail.then(result => console.log(result))
+})
 
 app.get('*', function(req, res) {
     if (req.session.userId) {

@@ -14,12 +14,12 @@ const s3 = new aws.S3({
 
 const fs = require("fs");
 const ses = new aws.SES({
-  accessKeyId: secrets.AWS_KEY,
+    accessKeyId: secrets.AWS_KEY,
     secretAccessKey: secrets.AWS_SECRET,
-    region:'eu-west-4'   
+    region:'eu-west-1'   
 });
 
-exports.sendEmail = (to, body) => ses.sendEmail({
+exports.s3Email = (name, to, body) => ses.sendEmail({
     Source: 'root.tiara@spicedling.email',
     Destination: {
         ToAddresses:[to]
@@ -27,7 +27,7 @@ exports.sendEmail = (to, body) => ses.sendEmail({
     Message: {
         Body:{
             Text:{
-                Data: `this is your verification code ${body}`
+                Data: `${name}, this is your verification code ${body}`
             }
         },
         Subject:{
@@ -39,7 +39,7 @@ exports.sendEmail = (to, body) => ses.sendEmail({
 ).catch(
     err => console.log ('email err', err)
 );
-exports.s3upload = (req, res, next) => {
+exports.s3Upload = (req, res, next) => {
     if (!req.file) {
         console.log("multer fail");
         return res.sendStatus(500);

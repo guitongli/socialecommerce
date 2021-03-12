@@ -1,12 +1,13 @@
 import React from 'react';
-import instance from './axios';
+import axios from './axios';
 import ErrorMsg from './error';
+import { Link, Router} from 'react-router-dom';
 
 // function ErrorMsg {
 //         return <p>check your info and type again</p>;
 //     }
 
-export default class Login extends React.Component {
+export default class Reset extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -19,7 +20,7 @@ export default class Login extends React.Component {
 
     handleClick(e) { 
      
-        instance.post('/login', {name : true}).then((result)=>{console.log(result); location.reqplace('/');}).catch((err)=>{console.log(err); this.setState({error: true})});
+        axios.post('/login', {name : true}).then((result)=>{console.log(result); location.reqplace('/');}).catch((err)=>{console.log(err); this.setState({error: true})});
 
     }
 
@@ -47,6 +48,7 @@ export default class Login extends React.Component {
                     <input name = 'password' type="password" placeholder="password" onChange={e => this.handleChange(e)} />
                     <input type = 'submit' onClick={e => this.handleClick()} value ='submit'/>
                 </form>
+                <Link to="/verifiation">Click here to find back password!</Link>
             </div>
         );
     }

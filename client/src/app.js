@@ -1,12 +1,8 @@
 import React from 'react';
 import axios from './axios';
-import ErrorMsg from './error';
-import { Link, Router } from 'react-router-dom';
+import ProfilePic from './profile-pic'; 
 
 
-// function ErrorMsg {
-//         return <p>check your info and type again</p>;
-//     }
 
 export default class Signup extends React.Component {
     constructor() {
@@ -15,12 +11,17 @@ export default class Signup extends React.Component {
             firstname: '',
             lastname: '',
             email: '',
-            password: '', 
+            profilepic: 'https://d33epyjwhmr3r5.cloudfront.net/cms/images/sandbox/madhuontap.svg', 
+            bio:''
             error: false,
+            uploaderToggle:false
     
         };
     }
 
+    componentDidMount(){
+        axios.get('/user').then(result => console.log(result))
+    }
   
     handleClick(e) {
         
