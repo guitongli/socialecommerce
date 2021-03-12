@@ -21,7 +21,7 @@ export default class Login extends React.Component {
 
     handleClick(e) { 
      
-        axios.post('/login', {name : true}).then((result)=>{console.log(result);
+        axios.post('/login', this.state).then((result)=>{console.log(result);
             // location.replace('/');
         }).catch((err)=>{console.log(err); this.setState({error: true})});
 

@@ -2,6 +2,8 @@ import React from 'react';
 import axios from './axios';
 import ProfilePic from './profile-pic';
 import Uploader from './uploader';
+import Profile from './profile';
+import BioEditor from './bio-editor';
 
 export default class App extends React.Component {
     constructor() {
@@ -15,6 +17,8 @@ export default class App extends React.Component {
             error: false,
             uploaderToggle: false
         };
+
+        this.handleImgClick = this.handleImgClick.bind(this);
     }
 
     componentDidMount() {
@@ -30,15 +34,17 @@ export default class App extends React.Component {
                 username: result.data.username,
                 yourname: result.data.yourname
             });
+
             if (!this.state.profilepic) {
-            this.setState({ profilepic: 'https://d33epyjwhmr3r5.cloudfront.net/cms/images/sandbox/madhuontap.svg' });
-        }
+                this.setState({
+                    profilepic: 'https://d33epyjwhmr3r5.cloudfront.net/cms/images/sandbox/madhuontap.svg'
+                });
+            }
         });
-        
     }
-    
-   handleImgClick(){
-        this.setState({uploaderToggle: !this.state.uploaderToggle});
+
+    handleImgClick() { 
+        this.setState({ uploaderToggle: !this.state.uploaderToggle });
     }
 
     // handleClick(e) {
@@ -68,8 +74,9 @@ export default class App extends React.Component {
         return (
             <div>
                 <ProfilePic profilepic={this.state.profilepic} handleImgClick={this.handleImgClick} />
-                {this.state.uploaderToggle && <Uploader />}
+                {this.state.uploaderToggle && <Uploader profilepic = {this.state.profilepic}/>}
                 <button>Logout</button>
+                <Profile username = {this.state.username}/>
             </div>
         );
     }

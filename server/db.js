@@ -71,3 +71,11 @@ module.exports.updatePassword = (
     const params = [email, hashkeys];
     return db.query(q, params);
 };
+ 
+module.exports.insertImg = (url, username) => {
+    const q = `INSERT INTO users (pic)
+    VALUES ($1, $2)
+    RETURNING *;`;
+    const params = [url, username];
+    return db.query(q, params);
+};

@@ -3,6 +3,7 @@ const app = express();
 const compression = require('compression');
 const path = require('path');
 const { s3Email, s3Upload } = require('./s3');
+const { s3Url } = require('./config.json');
 const db = require('./db');
 const cookieSession = require('cookie-session');
 const { hash, compare } = require('./bc');
@@ -10,6 +11,26 @@ const csrf = require('csurf');
 const cryptoRandomString = require('crypto-random-string');
 const secretCode = cryptoRandomString({
     length: 6
+}); 
+
+const multer = require('multer');
+const uidSafe = require('uid-safe'); 
+
+const diskStorage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, __dirname + '/uploads');
+    },
+    filename: function(req, file, callback) {
+        uidSafe(24).then(function(uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    }
+});
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152
+    }
 });
 // const bodyParser = require("body-parser");
 // const {
@@ -103,7 +124,7 @@ app.post('/login', (req, res) => {
                             req.session.userEmail = info.rows[0].email;
                             req.session.username= info.rows[0].username;
                             console.log(req.session);
-                            res.json({succes:true})
+                            // res.json({succes:true})
 
                         }
                     })
@@ -169,6 +190,37 @@ app.get('/user', (req, res) => {
     db.getName(req.session.userEmail).then(result => {
         res.json(result.rows[0]);
     });
+});
+app.post('/avatar', uploader.single('file'), s3Upload, (req, res) => {
+    // if (req.file) {
+    //     res.json({ succes: true });
+    // } else {
+    //     res.json({ success: false });
+    //     console.log("why");
+    // }
+    console.log('file', req.file, 'body', req.body);
+
+    const {username } = req.body;
+    if (req.file.size > 300000) {
+        res.sendStatus('oversize');
+    }
+    const { filename } = req.file;
+    db
+        .insertImg(s3Url + filename, username)
+        .then(result => {
+            db
+                .getImgs()
+                .then(result => {
+                    //    res.json(result.rows);
+                    res.redirect('/gallery');
+                })
+                .catch(err => {
+                    console.log('cant send updated photos', err);
+                });
+        })
+        .catch(err => {
+            console.log('save to db problem', err);
+        });
 });
 
 app.get('*', function(req, res) {
