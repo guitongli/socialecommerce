@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from './axios';
 import ErrorMsg from './error.js';
+import {Link} from 'react-router-dom';
 
 export default class Verification extends React.Component {
     constructor() {
@@ -13,7 +14,16 @@ export default class Verification extends React.Component {
             password2: ''
         };
     }
-
+    componentDidMount(){
+        if(this.props){
+            const passedemail= this.props.email;
+            this.setState({step: 2, email:passedemail});
+            if (this.state.step ==3){
+                this.setState({step: 4});
+            }
+            
+        }
+    }
     sendCode() {
         axios
             .post('/verification/sendemail', this.state.email)
@@ -29,7 +39,8 @@ export default class Verification extends React.Component {
             .post('/verification', this.state)
             .then(result => {
                 if (result.data.success) {
-                    this.setState({ step: 3 });
+                    if(this.props){this.setState({ step: 4});}
+                    else{this.setState({ step: 3 });}
                 }
             })
             .catch(err => console.log(err));
@@ -37,7 +48,8 @@ export default class Verification extends React.Component {
     updatePassword() {
         if (this.state.password == this.state.password2) {
             axios.post('/verification/updatepassword', this.state).then(result => {
-                if (result.data.success) {  this.setState({ step: 3 });
+                if (result.data.success) {
+                    this.setState({ step: 4 });
                 }
             });
         }
@@ -69,9 +81,9 @@ export default class Verification extends React.Component {
             return (
                 <div>
                     <h1>Please decide a new password</h1>
-                    <input type="text" placeholder="password" name="password" onChange={e => this.handleChange(e)} />
+                    <input type="password" placeholder="password" name="password" onChange={e => this.handleChange(e)} />
                     <input
-                        type="text"
+                        type="password"
                         placeholder="repeat password"
                         name="password2"
                         onChange={e => this.handleChange(e)}

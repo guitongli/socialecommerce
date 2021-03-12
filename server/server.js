@@ -49,7 +49,7 @@ app.use(compression());
 app.use(express.static(path.join(__dirname, '..', 'client', 'public')));
 
 app.get('/welcome', (req, res) => {
-    if (req.session.userId) {
+    if (req.session.username) {
         res.redirect('/');
     } else {
         res.sendFile(path.join(__dirname, '..', 'client', 'index.html'));
@@ -57,20 +57,19 @@ app.get('/welcome', (req, res) => {
 });
 
 app.post('/signup', (req, res) => {
-    const { firstname, lastname, password, email } = req.body;
+    const { username, yourname, password, email } = req.body;
     // req.session.csrfSecret = null;
     console.log(req.body);
-    if (!firstname || !lastname || !password || !email) {
+    if (!username || !yourname || !password || !email) {
         res.json({ error: true });
     } else {
         hash(password)
             .then(hashedkeys => {
                 return db
-                    .insertUser(firstname, lastname, email, hashedkeys)
+                    .insertUser(username, yourname, email, hashedkeys)
                     .then(returns => {
-                        req.session.userID = returns.rows[0].id;
-                        var currentID = returns.rows[0].id;
-                        req.session.userID = currentID;
+                        console.log('inserted user to db', returns);
+                        req.session.userEmail = email; 
                         res.json({ success: true });
                         res.end();
                     })
@@ -88,6 +87,7 @@ app.post('/signup', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
+    // console.log(csrfToken);
     const { email, password } = req.body;
     if (!email || !password) {
         res.json({ success: false });
@@ -101,8 +101,10 @@ app.post('/login', (req, res) => {
                     .then(result => {
                         if (result == true) {
                             req.session.userEmail = info.rows[0].email;
+                            req.session.username= info.rows[0].username;
                             console.log(req.session);
-                            res.redirect('/')
+                            res.json({succes:true})
+
                         }
                     })
                     .catch(err => {
@@ -111,11 +113,7 @@ app.post('/login', (req, res) => {
             })
             .catch(err => {
                 console.log(err);
-                res.render('login', {
-                    layout: 'forlogin',
-                    nonexist: true,
-                    csrfToken: req.csrfToken()
-                });
+               
             });
     }
 });
@@ -129,7 +127,7 @@ app.post('/verification/sendemail', (req, res) => {
                 db
                     .getName(req.body.email)
                     .then(result => {
-                        s3Email(result.rows[0].firstname, 'guitong.lee.contact@gmail.com', secretCode).then(result => {
+                        s3Email(result.rows[0].yourname, 'guitong.lee.contact@gmail.com', secretCode).then(result => {
                             res.json({ success: true });
                         });
 
@@ -140,9 +138,11 @@ app.post('/verification/sendemail', (req, res) => {
         })
         .catch(err => console.log(err));
 });
+
+
 app.post('/verification', (req, res) => {
     console.log(req.body);
-    db.getCode(req.body.code).then(result => {
+    db.getCode(req.body.email).then(result => {
         console.log(result);
         if (result.rows[0].code == secretCode) {
             res.json({ success: true });
@@ -164,13 +164,15 @@ app.post('/verification/updatepassword', (req, res) => {
     });
 });
 
-app.get('/', (req, res)=>{
+app.get('/user', (req, res) => {
     console.log(req.session.userEmail);
-    db.getName(req.session.userEmail.then(result => console.log(result))
-})
+    db.getName(req.session.userEmail).then(result => {
+        res.json(result.rows[0]);
+    });
+});
 
 app.get('*', function(req, res) {
-    if (req.session.userId) {
+    if (!req.session.userEmail) {
         res.redirect('/welcome');
     } else {
         res.sendFile(path.join(__dirname, '..', 'client', 'index.html'));

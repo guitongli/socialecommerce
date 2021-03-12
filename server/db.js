@@ -7,12 +7,12 @@ if (process.env.DATABASE_URL) {
     db = spicedPg(`postgres:postgres:postgres@localhost:5432/socialnetwork`);
 }
 
-module.exports.insertUser = (firstname, lastname, email, hashkeys) => {
-    const q = `INSERT INTO users (firstname, lastname, email, hashkeys)
+module.exports.insertUser = (username, yourname, email, hashkeys) => {
+    const q = `INSERT INTO users (username, yourname, email, hashkeys)
     VALUES($1, $2, $3, $4)
     RETURNING *;`;
 
-    const params = [firstname, lastname, email, hashkeys];
+    const params = [username, yourname, email, hashkeys];
 
     return db.query(q, params);
 };

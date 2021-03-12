@@ -3,13 +3,13 @@ drop table if exists users;
 
 CREATE TABLE users (
     id SERIAL primary key,
-    firstname TEXT NOT NULL CHECK (firstname <> ''), 
-    lastname TEXT NOT NULL CHECK(lastname <> ''), 
+    username TEXT NOT NULL UNIQUE  CHECK (username <> ''), 
+    yourname TEXT NOT NULL CHECK(yourname <> ''), 
     email TEXT NOT NULL UNIQUE CHECK (email <> ''),
     hashkeys TEXT NOT NULL CHECK (hashkeys <> ''),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    bio TEXT NOT NULL CHECK (bio <> ''),
-    pic TEXT NOT NULL CHECK (pic <> '')
+    bio TEXT,
+    pic TEXT
 );
 
 
