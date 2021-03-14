@@ -6,9 +6,9 @@ export default class Uploader extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            userId: '',
-            password: '',
+          
+            username:'',
+          
             error: false,
             pic: '',
             file: ''
@@ -16,8 +16,9 @@ export default class Uploader extends React.Component {
     }
     // this.componentDidMount = this.componentDidMount.bind(this);
     componentDidMount() {
-        console.log(this.props.profilepic);
-        this.setState({ pic: this.props.profilepic });
+       
+        this.setState({ pic: this.props.profilepic, username:this.props.username });
+         console.log(this.props.username);
     }
 
     handleChange(e) {
@@ -27,28 +28,21 @@ export default class Uploader extends React.Component {
 
     handleClick(e) {
         // var file = myFileInput.files[0];
-        console.log('click');
+        console.log('click', this.state.username);
         var formData = new FormData();
 
-        // formData.append('title', this.title);
-        // formData.append("description", this.description);
-        formData.append('file', this.file);
+        formData.append('file', this.state.file);
         // formData.append('description', this.description);
-        formData.append('username', this.username);
+        formData.append('username', this.state.username);
+        
         axios
             .post('/avatar', formData)
             .then(response => {
-                console.log('uploaded', response);
-                // axios
-                //     .get('/gallery')
-                //     .then(function (imagelist) {
-                //         console.log(imagelist);
-                //         self.images = imagelist.data;
-                //         // console.log( "staying outside", imagelist.data);
-                // })
-                // .catch(function (err) {
-                //     console.log('error in axios', err);
-                // });
+                if (response.data.success ==true){
+                    this.setState({pic:response.data.pic});
+                    this.props.updateImg(response.data.pic);
+                }
+              
             })
             .catch(err => {
                 console.log(err);

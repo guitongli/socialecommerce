@@ -8,8 +8,8 @@ if (process.env.DATABASE_URL) {
 }
 
 module.exports.insertUser = (username, yourname, email, hashkeys) => {
-    const q = `INSERT INTO users (username, yourname, email, hashkeys)
-    VALUES($1, $2, $3, $4)
+    const q = `INSERT INTO users (username, yourname, email, hashkeys,bio,pic)
+    VALUES($1, $2, $3, $4, 0, 0)
     RETURNING *;`;
 
     const params = [username, yourname, email, hashkeys];
@@ -25,11 +25,18 @@ WHERE email = $1;`;
     return db.query(q,params);
 };
 
-module.exports.getName = (email) => {
+module.exports.getEmail = (email) => {
     const q = `SELECT *
 FROM users
 WHERE email = $1;`;
     const params = [email];
+    return db.query(q,params);
+};
+module.exports.getId = (id) => {
+    const q = `SELECT *
+FROM users
+WHERE id = $1;`;
+    const params = [id];
     return db.query(q,params);
 };
 
@@ -73,9 +80,20 @@ module.exports.updatePassword = (
 };
  
 module.exports.insertImg = (url, username) => {
-    const q = `INSERT INTO users (pic)
-    VALUES ($1, $2)
-    RETURNING *;`;
+     const q = `
+    UPDATE users 
+    SET pic = $1
+    WHERE username = $2
+   RETURNING *;`;
     const params = [url, username];
+    return db.query(q, params);
+};
+module.exports.insertBio = (bio, username) => {
+     const q = `
+    UPDATE users 
+    SET bio = $1
+    WHERE username = $2
+   RETURNING *;`;
+    const params = [bio, username];
     return db.query(q, params);
 };

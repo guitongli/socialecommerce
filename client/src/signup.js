@@ -21,25 +21,27 @@ export default class Signup extends React.Component {
         };
     }
 
-    handleClick(e) {
+    async handleClick(e) {
         console.log(e);
-        axios
-            .post('/signup', this.state)
-            .then(result => {
-                console.log(result);
-                if (result.data.success) {
-                    axios
-                        .post('/verification/sendemail', this.state)
-                        .then(result => {
-                            this.setState({ step: 2 });
-                        })
-                        .catch(err => console.log(err));
-                }
-            })
-            .catch(err => {
-                console.log(err);
+        const signupresult = await axios.post('/signup', this.state);
+
+        console.log(signupresult);
+        if (signupresult.data.success) {
+            const checksent = await axios.post('/verification/sendemail', this.state);
+            if (checksent.data.success) {
+                this.setState({ step: 2 });
+                this.setState({
+                    firstname: '',
+                    lastname: '',
+                    email: '',
+                    password: ''
+                });
+            } else {
                 this.setState({ error: true });
-            });
+            }
+        } else {
+            this.setState({ error: true });
+        }
     }
 
     handleChange(e) {

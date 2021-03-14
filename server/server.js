@@ -11,10 +11,10 @@ const csrf = require('csurf');
 const cryptoRandomString = require('crypto-random-string');
 const secretCode = cryptoRandomString({
     length: 6
-}); 
+});
 
 const multer = require('multer');
-const uidSafe = require('uid-safe'); 
+const uidSafe = require('uid-safe');
 
 const diskStorage = multer.diskStorage({
     destination: function(req, file, callback) {
@@ -26,6 +26,8 @@ const diskStorage = multer.diskStorage({
         });
     }
 });
+app.use(express.urlencoded({ extended: false }));
+
 const uploader = multer({
     storage: diskStorage,
     limits: {
@@ -70,11 +72,7 @@ app.use(compression());
 app.use(express.static(path.join(__dirname, '..', 'client', 'public')));
 
 app.get('/welcome', (req, res) => {
-    if (req.session.username) {
-        res.redirect('/');
-    } else {
-        res.sendFile(path.join(__dirname, '..', 'client', 'index.html'));
-    }
+    res.sendFile(path.join(__dirname, '..', 'client', 'index.html'));
 });
 
 app.post('/signup', (req, res) => {
@@ -90,7 +88,7 @@ app.post('/signup', (req, res) => {
                     .insertUser(username, yourname, email, hashedkeys)
                     .then(returns => {
                         console.log('inserted user to db', returns);
-                        req.session.userEmail = email; 
+                        req.session.userEmail = email;
                         res.json({ success: true });
                         res.end();
                     })
@@ -109,6 +107,7 @@ app.post('/signup', (req, res) => {
 
 app.post('/login', (req, res) => {
     // console.log(csrfToken);
+    console.log(req.body);
     const { email, password } = req.body;
     if (!email || !password) {
         res.json({ success: false });
@@ -122,19 +121,19 @@ app.post('/login', (req, res) => {
                     .then(result => {
                         if (result == true) {
                             req.session.userEmail = info.rows[0].email;
-                            req.session.username= info.rows[0].username;
+                            req.session.username = info.rows[0].username;
                             console.log(req.session);
-                            // res.json({succes:true})
-
+                            res.json({ success: true });
                         }
                     })
                     .catch(err => {
                         console.log(err);
+                        res.json({ success: false });
                     });
             })
             .catch(err => {
                 console.log(err);
-               
+                res.json({ success: false });
             });
     }
 });
@@ -146,7 +145,7 @@ app.post('/verification/sendemail', (req, res) => {
         .then(result => {
             if (result.rows[0].count) {
                 db
-                    .getName(req.body.email)
+                    .getEmail(req.body.email)
                     .then(result => {
                         s3Email(result.rows[0].yourname, 'guitong.lee.contact@gmail.com', secretCode).then(result => {
                             res.json({ success: true });
@@ -159,7 +158,6 @@ app.post('/verification/sendemail', (req, res) => {
         })
         .catch(err => console.log(err));
 });
-
 
 app.post('/verification', (req, res) => {
     console.log(req.body);
@@ -187,10 +185,34 @@ app.post('/verification/updatepassword', (req, res) => {
 
 app.get('/user', (req, res) => {
     console.log(req.session.userEmail);
-    db.getName(req.session.userEmail).then(result => {
+    db.getEmail(req.session.userEmail).then(result => {
         res.json(result.rows[0]);
     });
 });
+
+app.get('/api/:id', (req, res) => {
+    db
+        .getId(req.params.id)
+        .then(result => {
+            res.json(result.rows[0]);
+            if (req.session.username == req.params.username) {
+                res.redirect('/');
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+});
+// app.get('/user/:username', (req,res)=>{
+//     console.log(req.params.username);
+//     db.getName(req.params.username).then(result =>{
+//          res.json(result.rows[0]);
+//     }).catch(err=>{console.log(err);
+//     res.redirect('/welcome')});
+//     if (req.session.username == req.params.username) {
+//         res.redirect('/');
+//     }
+// });
 app.post('/avatar', uploader.single('file'), s3Upload, (req, res) => {
     // if (req.file) {
     //     res.json({ succes: true });
@@ -198,9 +220,10 @@ app.post('/avatar', uploader.single('file'), s3Upload, (req, res) => {
     //     res.json({ success: false });
     //     console.log("why");
     // }
+
     console.log('file', req.file, 'body', req.body);
 
-    const {username } = req.body;
+    const { username } = req.body;
     if (req.file.size > 300000) {
         res.sendStatus('oversize');
     }
@@ -208,19 +231,33 @@ app.post('/avatar', uploader.single('file'), s3Upload, (req, res) => {
     db
         .insertImg(s3Url + filename, username)
         .then(result => {
-            db
-                .getImgs()
-                .then(result => {
-                    //    res.json(result.rows);
-                    res.redirect('/gallery');
-                })
-                .catch(err => {
-                    console.log('cant send updated photos', err);
-                });
+            console.log(result);
+            res.json({ success: true, pic: s3Url + filename });
         })
         .catch(err => {
             console.log('save to db problem', err);
         });
+});
+app.post('/bio', (req, res) => {
+    const { username, bio } = req.body;
+
+    db
+        .insertBio(bio, username)
+        .then(result => {
+            console.log(result);
+            res.json({ success: true });
+        })
+        .catch(err => {
+            console.log('save to bio problem', err);
+        });
+});
+app.get('/unlog', (req, res) => {
+    console.log(req.session);
+
+    req.session.userID = null;
+    req.session.userEmail = null;
+    console.log(req.session);
+    res.json({ succuss: true });
 });
 
 app.get('*', function(req, res) {
