@@ -1,10 +1,6 @@
 import React from 'react';
 import axios from './axios';
-// import { Link, Router } from 'react-router-dom';
 
-// function ErrorMsg {
-//         return <p>check your info and type again</p>;
-//     }
 
 export default class BioEditor extends React.Component {
     constructor(props) {

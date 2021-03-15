@@ -183,7 +183,7 @@ app.post('/verification/updatepassword', (req, res) => {
     });
 });
 
-app.get('/user', (req, res) => {
+app.get('/api/user', (req, res) => {
     console.log(req.session.userEmail);
     db.getEmail(req.session.userEmail).then(result => {
         res.json(result.rows[0]);
@@ -203,6 +203,18 @@ app.get('/api/:id', (req, res) => {
             console.log(err);
         });
 });
+app.get('/search/recent', (req, res) => {
+    db.getRecent().then(result => res.json(result.rows)).catch(err => {
+        console.log('recent', err);
+        res.json({ success: false });
+    });
+});
+app.get('/search/recent/:input', (req, res) => {
+    const input = req.params.input;
+    db.search(input).then(result => res.json(result.rows)).catch(err => console.log('recent', err));
+    res.json({ success: false });
+});
+
 // app.get('/user/:username', (req,res)=>{
 //     console.log(req.params.username);
 //     db.getName(req.params.username).then(result =>{

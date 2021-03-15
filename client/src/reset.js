@@ -48,6 +48,7 @@ export default class Reset extends React.Component {
                     <input name = 'password' type="password" placeholder="password" onChange={e => this.handleChange(e)} />
                     <input type = 'submit' onClick={e => this.handleClick()} value ='submit'/>
                 </form>
+                
                 <Link to="/verifiation">Click here to find back password!</Link>
             </div>
         );

@@ -1,5 +1,5 @@
 import BioEditor from './bio-editor.js';
-import { render, waitFor, fireEvent, mockAPI} from '@testing-library/react';
+import { render, waitsFor, runs, fireEvent, mockAPI } from '@testing-library/react';
 import axios from './axios';
 
 test('When no bio is passed to it, an "Add" button is rendered', () => {
@@ -25,13 +25,7 @@ test('Clicking either the "Add" or "Edit" button causes a textarea and a "Save" 
 
 jest.mock('./axios');
 test('Clicking the "Save" button causes an ajax request that calls a propped function', async () => {
-   
-    const onClick = jest.fn(console.log('hi'));
-    axios.post.mockResolvedValue({
-        data: {
-            success: true
-        }
-    });
+    const onClick = jest.fn(() => <div>bio</div>);
 
     const { container } = render(<BioEditor updateBio={onClick} />);
     fireEvent.click(container.querySelector('button'));
@@ -41,7 +35,17 @@ test('Clicking the "Save" button causes an ajax request that calls a propped fun
 
     // expect(container.querySelector('textarea')).toBeTruthy();
 
-    await waitFor(() => expect(mockAPI).toHaveBeenCalledTimes(1));
+    axios.post.mockResolvedValue({
+        data: {
+            success: true
+        }
+    });
 
-    expect(onClick).toBeCalledWith(expect.anything());
+    // or you could use the following depending on your use case:
+    // axios.get.mockImplementation(() => Promise.resolve(resp))
+
+    waitFor(() => {
+        expect(onClick.mock.calls.length).toBe(1);
+    });
+    expect(container.querySelector('textarea')).toBeFalsy();
 });

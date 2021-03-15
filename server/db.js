@@ -8,8 +8,8 @@ if (process.env.DATABASE_URL) {
 }
 
 module.exports.insertUser = (username, yourname, email, hashkeys) => {
-    const q = `INSERT INTO users (username, yourname, email, hashkeys,bio,pic)
-    VALUES($1, $2, $3, $4, 0, 0)
+    const q = `INSERT INTO users (username, yourname, email, hashkeys, bio, pic)
+    VALUES($1, $2, $3, $4, null, null)
     RETURNING *;`;
 
     const params = [username, yourname, email, hashkeys];
@@ -95,5 +95,15 @@ module.exports.insertBio = (bio, username) => {
     WHERE username = $2
    RETURNING *;`;
     const params = [bio, username];
+    return db.query(q, params);
+};
+
+module.exports.getRecent = ()=>{
+    const q = `SELECT * FROM users ORDER BY created_at DESC LIMIT 10;`;
+    return db.query(q);
+};
+module.exports.search = (input)=>{
+    const q = `SELECT * FROM users WHERE yourname ILIKE '$1%';`;
+    const params = [input];
     return db.query(q, params);
 };

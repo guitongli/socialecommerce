@@ -34,8 +34,9 @@ export default class Logout extends React.Component {
             <div>
                 {this.state.error && <ErrorMsg />}
                 <h1> we will miss you.</h1>
-
-                <Link to="/welcome">Click here to login!</Link>
+                <Router>
+                    <Link to="/welcome">Click here to login!</Link>
+                </Router>
             </div>
         );
     }
