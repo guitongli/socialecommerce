@@ -20,13 +20,16 @@ export default class App extends React.Component {
             bio: '',
             error: false,
             uploaderToggle: false,
-            searchToggle: false
+            searchToggle: false,
+            avatarToggle: true
         };
 
         this.handleImgClick = this.handleImgClick.bind(this);
         this.updateImg = this.updateImg.bind(this);
           this.handleSearchToggle = this.handleSearchToggle.bind(this);
           this.updateBio = this.updateBio.bind(this);
+          this.handleAvatarToggle = this.handleAvatarToggle.bind(this);
+
     }
 
     async componentDidMount() {
@@ -38,7 +41,8 @@ export default class App extends React.Component {
             id: result.data.id,
             profilepic: result.data.pic,
             username: result.data.username,
-            yourname: result.data.yourname
+            yourname: result.data.yourname,
+            
         });
 
         if (!this.state.profilepic) {
@@ -60,17 +64,24 @@ export default class App extends React.Component {
     handleSearchToggle() {
         this.setState({ searchToggle: !this.state.searchToggle });
     }
+    handleAvatarToggle (){
+        console.log('toggle is activated');
+        
+        this.setState({ avatarToggle: !this.state.avatarToggle });
+        location.replace("/logout");
+    }
     
     render() {
         return (
             <div>
-                <Avatar
+                {this.state.avatarToggle && <Avatar
                     className="avatar"
                     username={this.state.username}
                     profilepic={this.state.profilepic}
                     handleImgClick={this.handleImgClick}
                     handleSearchToggle={this.handleSearchToggle}
-                />
+                    handleAvatarToggle={this.handleAvatarToggle}
+                />}
                 
                 {this.state.searchToggle &&
                     <Search

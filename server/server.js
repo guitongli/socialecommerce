@@ -150,7 +150,7 @@ app.post("/verification/sendemail", (req, res) => {
                             rows[0].yourname,
                             "guitong.lee.contact@gmail.com",
                             secretCode
-                        ).then((result) => {
+                        ).then(() => {
                             res.json({ success: true });
                         });
 
@@ -159,7 +159,10 @@ app.post("/verification/sendemail", (req, res) => {
                             secretCode
                         ).then((result) => console.log(result));
                     })
-                    .catch((err) => res.json({ success: false }));
+                    .catch((err) => {
+                        console.log(err);
+                        res.json({ success: false });
+                    });
             }
         })
         .catch((err) => console.log(err));
@@ -179,7 +182,7 @@ app.post("/verification/updatepassword", (req, res) => {
     hash(req.body.password).then((hashedkeys) => {
         return db
             .updatePassword(req.body.email, hashedkeys)
-            .then((returns) => {
+            .then(() => {
                 res.json({ success: true });
             })
             .catch((err) => {
@@ -311,13 +314,13 @@ app.get("/friend/:method/:hisId", (req, res) => {
         db.breakFriendship(yourId, hisId).then(({ rows }) => {
             console.log(rows);
             // if(rows[0].id){
-            res.json({stage:'follow'});
+            res.json({ stage: "follow" });
         });
     } else if (method == "accept") {
         db.acceptFriendship(yourId, hisId).then(({ rows }) => {
             console.log(rows);
             // if(rows[0].id){
-            res.json({stage:'following'});
+            res.json({ stage: "following" });
         });
     }
 });

@@ -31,8 +31,7 @@ export default class Logout extends React.Component {
 
     render() {
         return (
-            <div>
-                {this.state.error && <ErrorMsg />}
+            <div> 
                 <h1> we will miss you.</h1>
                
                     <Link to="/welcome">Click here to login!</Link>
