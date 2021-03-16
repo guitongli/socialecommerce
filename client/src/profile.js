@@ -5,11 +5,11 @@ export default function Profile(props) {
 
     return (
         <div>
-                <h1>{props.yourname}</h1>
+            <h1>{props.yourname}</h1>
             <img src={props.pic}></img>
-        <p>{props.bio} {props.username}</p>
-            
-            <BioEditor oldbio = {props.bio} username = {props.username} updateBio={props.updateBio}/>
+            <p>{props.bio} {props.username}</p>
+
+            <BioEditor oldbio={props.bio} username={props.username} updateBio={props.updateBio} />
         </div>
     );
 }

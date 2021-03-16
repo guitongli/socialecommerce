@@ -4,6 +4,7 @@ import Signup from './signup';
 import Login from './login';
 import Reset from './reset';
 import Verification from './verification';  
+import Logout from './logout';
 
 
 export default function Welcome() {
@@ -18,6 +19,7 @@ export default function Welcome() {
                     <Route path='/login' component={Login} />
                     <Route path='/reset' component={Reset} /> 
                     <Route path='/verification' component={Verification} />
+                  
  
                 </div>
             </HashRouter>

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from './axios';
 import { Link } from 'react-router-dom';
+import FriendButton from './friend-button';
 
 export default class OtherProfile extends React.Component {
     constructor(props) {
@@ -51,6 +52,7 @@ console.log(this.state.id);
                 <p>
                     {this.state.bio}
                 </p>
+                <FriendButton hisId ={this.props.match.params.id}/>
             </div>
         );
     }

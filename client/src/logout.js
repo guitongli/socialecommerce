@@ -8,8 +8,8 @@ import { Link, Router } from 'react-router-dom';
 //     }
 
 export default class Logout extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             error: false,
             email: '',
@@ -34,9 +34,9 @@ export default class Logout extends React.Component {
             <div>
                 {this.state.error && <ErrorMsg />}
                 <h1> we will miss you.</h1>
-                <Router>
+               
                     <Link to="/welcome">Click here to login!</Link>
-                </Router>
+                 
             </div>
         );
     }

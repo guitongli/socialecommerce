@@ -7,27 +7,30 @@ export default function Search() {
 
     useEffect(function () {
         axios.get('/search/recent').then(
-            (result) => { console.log('recent', result); setUsers(result.data) });
+            (result) => { console.log('recent', result); setUsers(result.data); });
     }, []);
+
     useEffect(function () {
-        axios.get(`/search/recent/${searchTerm}`).then(
-            (result) => { console.log('searched', result); });
+        axios.get(`/search/search/${searchTerm}`).then(
+            (result) => { console.log('searched', result); setUsers(result.data);});
     }, [searchTerm]);
 
     return (
         <>
-            <input onChange={e => { setSearchTerm(e.target.value) }} placeholder={searchTerm}></input>
+            <input onChange={e => { setSearchTerm(e.target.value); 
+            console.log('what did you write', e.target.value);
+            }} placeholder={searchTerm}></input>
 
             {
-                users && result.map(function(user){
-                    return(<div>
-                    {user.username}  <p>{user.yourname}</p>
-                 </div >)
+                users && users.map(function (user) {
+                    return (<div key = {user.id}>
+                        {user.username}  <p>{user.yourname}</p> <img src = {user.pic}></img>
+                    </div >);
                 })}
         </>
     );
 }
-   
 
 
-}
+
+

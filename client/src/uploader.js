@@ -36,7 +36,7 @@ export default class Uploader extends React.Component {
         formData.append('username', this.state.username);
         
         axios
-            .post('/avatar', formData)
+            .post('/save/avatar', formData)
             .then(response => {
                 if (response.data.success ==true){
                     this.setState({pic:response.data.pic});

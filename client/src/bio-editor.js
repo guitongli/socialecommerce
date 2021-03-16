@@ -1,65 +1,46 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import axios from './axios';
 
+export default function BioEditor(props) {
+    const [username, setUserName] = useState();
+    const [yourname, setYourName] = useState();
+    const [newBio, setNewBio] = useState();
+    const [editorVisible, setEditorVisible] = useState(false);
+    const [buttonEdit, setButtonEdit] = useState();
+    useEffect(function () {
+        console.log('bio props', props);
+        if (props.oldbio) { setButtonEdit(true);}
 
-export default class BioEditor extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            bio: '',
-            username: '',
-            error: false,
-            editorVisible: false
-        };
-        this.showArea = this.showArea.bind(this);
-        this.saveBio = this.saveBio.bind(this);
+    });
+
+    async function saveBio() {
+        props.updateBio(newBio);
+
+        setEditorVisible(false);
+        const result = await axios.post('/save/bio', { username: props.username, bio: newBio });
+        console.log('saved bio', result);
     }
 
-    componentDidMount() {
-        console.log('bio props', this.props);
-        this.setState({ bio: this.props.bio, username: this.props.username });
-        // if (this.props.bio) {
-        //     this.setState({ editorVisible: false });
-        // }
-    }
-    async saveBio() {
-        const result = await axios.post('/bio', this.state);
-        console.log(result);
-        this.props.updateBio(this.state.bio);
-        this.setState({ editorVisible: false });
+    function toggleArea() {
+        setEditorVisible(!editorVisible);
     }
 
-    handleChange(e) {
-        console.log(e.target.name);
-        this.setState({
-            [e.target.name]: e.target.value
-        });
-        console.log(this.state);
-    }
-
-    showArea() {
-        this.setState({ editorVisible: true });
-    }
-
-    render() {
-        if (this.state.editorVisible) {
+    if (editorVisible) {
+        return (
+            <div className="bio-editor">
+                <textarea name="bio" onChange={e => { setNewBio(e.target.value); console.log('hi', e.target.value, 'bio', newBio); }} />
+                <button onClick={saveBio}>save</button><button onClick={toggleArea}>cancel</button>
+            </div>
+        );
+    } else {
+        if (props.oldbio) {
             return (
-                <div className="bio-editor">
-                    <textarea name="bio" onChange={e => this.handleChange(e)} />
-                    <button onClick={this.saveBio}>save</button>
+                <div>
+                    <button onClick={toggleArea}>edit</button>
                 </div>
             );
         } else {
-            if (!this.state.bio) {
-                return <button onClick={this.showArea}>add</button>;
-            } else {
-                return (
-                    <div>
-                        
-                        <button onClick={this.showArea}>edit</button>
-                    </div>
-                );
-            }
+            return <button onClick={toggleArea}>add</button>;
         }
     }
 }

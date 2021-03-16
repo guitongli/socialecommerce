@@ -26,6 +26,7 @@ export default class App extends React.Component {
         this.handleImgClick = this.handleImgClick.bind(this);
         this.updateImg = this.updateImg.bind(this);
           this.handleSearchToggle = this.handleSearchToggle.bind(this);
+          this.updateBio = this.updateBio.bind(this);
     }
 
     async componentDidMount() {
@@ -70,6 +71,7 @@ export default class App extends React.Component {
                     handleImgClick={this.handleImgClick}
                     handleSearchToggle={this.handleSearchToggle}
                 />
+                
                 {this.state.searchToggle &&
                     <Search
                         className="search"
@@ -102,6 +104,7 @@ export default class App extends React.Component {
                                 />
                             </div>}
                     />
+                      <Route path = 'logout' component ={Logout}/>
                     <Route
                         path="/user/:id"
                         render={props =>
