@@ -1,0 +1,67 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.welcome {
+  width: 100%;
+  background: linear-gradient(to right, rgba(129, 178, 154, 0.9), rgba(129, 178, 154, 0.3)), url("../public/super woman.png");
+  margin: 0 auto;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.welcome .welcome__title {
+  font-weight: weight(bold);
+  color: #e07a5f;
+}
+
+.welcome .welcome__formbutton {
+  border-radius: 5px;
+  background-color: #3d405b;
+  color: #f4f1de;
+}
+
+.welcome .welcome__formbutton:hover {
+  color: palegoldenrod;
+  background-color: #81b29a;
+}
+
+.welcome__form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+@media (max-width: 800px) {
+  .welcome {
+    width: 100%;
+  }
+}
+
+.welcome input:hover {
+  border-color: #81b29a;
+}
+
+.profile {
+  display: grid;
+  grid-template-rows: fr fr fr;
+}
+
+.profile h1 {
+  transition: all 0.5s ease-in-out;
+}
+
+.profile h1:hover {
+  color: #f4f1de;
+}
+
+body {
+  background-color: #f4f1de;
+  font-weight: 500;
+  color: #3d405b;
+}
+/*# sourceMappingURL=main.css.map */

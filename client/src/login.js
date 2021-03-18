@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from './axios';
 import ErrorMsg from './error';
-import { Link, Router } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // function ErrorMsg {
 //         return <p>check your info and type again</p>;
@@ -18,7 +18,7 @@ export default class Login extends React.Component {
         };
     }
 
-    handleClick(e) {
+    handleClick() {
         console.log('clicked');
         axios
             .post('/login', this.state)
@@ -46,17 +46,17 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className = 'welcome__form'>
                 {this.state.error && <ErrorMsg />}
                 <h1> to the antisocial network.</h1>
 
                 <input name="email" type="email" placeholder="email" onChange={e => this.handleChange(e)} />
 
                 <input name="password" type="password" placeholder="password" onChange={e => this.handleChange(e)} />
-                <input type="submit" onClick={e => this.handleClick()} value="submit" />
+                <input type="submit" onClick={() => this.handleClick()} value="submit" />
 
                 <Link to="/verification">Click here to find back password!</Link>
-                 <Link to="/">Click here to signup!</Link>
+                <Link to="/">Click here to signup!</Link>
             </div>
         );
     }

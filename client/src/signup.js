@@ -54,7 +54,7 @@ export default class Signup extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className = 'welcome__form'>
                 <h1> to the antisocial network.</h1>
                 {this.state.error && <ErrorMsg />}
                 <input name="username" type="text" placeholder="unique username" onChange={e => this.handleChange(e)} />
@@ -62,7 +62,7 @@ export default class Signup extends React.Component {
                 <input name="email" type="email" placeholder="email" onChange={e => this.handleChange(e)} />
 
                 <input name="password" type="password" placeholder="password" onChange={e => this.handleChange(e)} />
-                <button onClick={e => this.handleClick()} value="submit">
+                <button className='welcome__formbutton' onClick={e => this.handleClick()} value="submit">
                     hihi
                 </button>
 

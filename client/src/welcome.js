@@ -9,12 +9,12 @@ import Logout from './logout';
 
 export default function Welcome() {
 
-  return (
-        <div id='welcome'>
-            <h1>Welcome</h1>
+    return (
+        <div className='welcome'>
+            <h1 className ='welcome__title'>Welcome</h1>
 
             <HashRouter>
-                <div>
+                <div className = 'light'>
                     <Route exact path='/' component ={Signup} />
                     <Route path='/login' component={Login} />
                     <Route path='/reset' component={Reset} /> 

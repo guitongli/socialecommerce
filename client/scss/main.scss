@@ -1,0 +1,11 @@
+@import "./resets", "./config";
+@import "./welcome", "./profile";
+
+@function weight($weight-name) {
+    @return map-get($font-weights, $weight-name);
+}
+body {
+    background-color: $base-color;
+    font-weight: weight(medium);
+    color: $coolnavy;
+}

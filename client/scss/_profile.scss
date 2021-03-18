@@ -1,0 +1,12 @@
+@import "./config";
+
+.profile {
+    display: grid;
+    grid-template-rows: fr fr fr;
+    h1 {
+        @include transition-ease;
+        &:hover {
+            color: $base-color;
+        }
+    }
+}

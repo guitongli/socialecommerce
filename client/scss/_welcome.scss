@@ -1,0 +1,43 @@
+@import "./config";
+
+.welcome {
+    width: 100%;
+    background: linear-gradient(
+            to right,
+            rgba($wallgreen, 0.9),
+            rgba($wallgreen, 0.3)
+        ),
+        url("../public/super\ woman.png");
+    margin: 0 auto;
+    justify-content: center;
+    @include flexCenter(column);
+
+    #{&}__title {
+        font-weight: weight(bold);
+        color: $zhusha;
+    }
+    #{&}__formbutton {
+        border-radius: 5px;
+        background-color: $coolnavy;
+        color: $base-color;
+        &:hover {
+            color: palegoldenrod;
+            background-color: $wallgreen;
+        }
+    }
+    &__form {
+        @include flexCenter(column);
+    }
+    @include mobile {
+        width: 100%;
+    }
+    input {
+        &:hover {
+            border-color: $wallgreen;
+        }
+    }
+}
+
+.light {
+    @include theme(false);
+}

@@ -61,7 +61,7 @@ export default class Verification extends React.Component {
     render() {
         if (this.state.step == 1) {
             return (
-                <div>
+                <div className = 'welcome__form'>
                     {this.state.error && <ErrorMsg />}
                     <h1> to the antisocial network.</h1>
                     <h2>please tell us your email so that we can send a secret code to you</h2>
@@ -71,7 +71,7 @@ export default class Verification extends React.Component {
             );
         } else if (this.state.step == 2) {
             return (
-                <div>
+                <div className = 'welcome__form'>
                     <h1>An email is on your way. Put in below the code you receive</h1>
                     <input type="text" placeholder="6-digit code" name="code" onChange={e => this.handleChange(e)} />
                     <button onClick={() => this.codeCheck()}>confirm</button>
@@ -79,7 +79,7 @@ export default class Verification extends React.Component {
             );
         } else if (this.state.step == 3) {
             return (
-                <div>
+                <div className = 'welcome__form'>
                     <h1>Please decide a new password</h1>
                     <input type="password" placeholder="password" name="password" onChange={e => this.handleChange(e)} />
                     <input
@@ -93,7 +93,7 @@ export default class Verification extends React.Component {
             );
         } else if (this.state.step == 4) {
             return (
-                <div>
+                <div className = 'welcome__form'>
                     <h1>congrats! now </h1>
                     <Link to="/login">Click here to Log in!</Link>
                 </div>

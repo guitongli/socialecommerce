@@ -43,10 +43,11 @@ console.log(this.state.id);
 
     render() {
         return (
-            <div>
-                <h1>
-                   username: {this.state.username}
-                </h1>
+            <div className ='others'>
+                <i className ='fab fa-twitter fa-2x'>
+                  
+                </i>
+                 <h1>{this.state.username}</h1> 
                 <img src={this.state.pic} />
                 <h1>{this.state.yourname}</h1>
                 <p>

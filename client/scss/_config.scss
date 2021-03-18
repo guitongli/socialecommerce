@@ -1,0 +1,35 @@
+$base-color: #f4f1de;
+$zhusha: #e07a5f;
+$coolnavy: #3d405b;
+$wallgreen: #81b29a;
+$creamyellow: #f2cc8f;
+$font-weights: (
+    "regular": 400,
+    "medium": 500,
+    "bold": 1000,
+);
+
+$mobile: 800px;
+
+@mixin flexCenter($direction) {
+    display: flex;
+    align-items: center;
+    flex-direction: $direction;
+}
+
+@mixin theme($light-theme: true) {
+    @if $light-theme {
+        background: darken($base-color, 100%);
+        color: lighten($coolnavy, 100%);
+    }
+}
+
+@mixin mobile {
+    @media (max-width: $mobile) {
+        @content;
+    }
+}
+
+@mixin transition-ease {
+    transition: all 0.5s ease-in-out;
+}

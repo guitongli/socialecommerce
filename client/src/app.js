@@ -1,40 +1,39 @@
-import React from 'react';
-import axios from './axios';
-import Avatar from './avatar';
-import Uploader from './uploader';
-import Profile from './profile';
-import { Route, BrowserRouter, Link } from 'react-router-dom';
-import OtherProfile from './other-profile';
-import Logout from './logout';
-import Search from './search';
+import React from "react";
+import axios from "./axios";
+import Avatar from "./avatar";
+import Uploader from "./uploader";
+import Profile from "./profile";
+import { Route, BrowserRouter, Link } from "react-router-dom";
+import OtherProfile from "./other-profile";
+import Logout from "./logout";
+import Search from "./search";
 
 export default class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            username: '',
-            yourname: '',
+            username: "",
+            yourname: "",
 
-            email: '',
+            email: "",
             profilepic: null,
-            bio: '',
+            bio: "",
             error: false,
             uploaderToggle: false,
             searchToggle: false,
-            avatarToggle: true
+            avatarToggle: true,
         };
 
         this.handleImgClick = this.handleImgClick.bind(this);
         this.updateImg = this.updateImg.bind(this);
-          this.handleSearchToggle = this.handleSearchToggle.bind(this);
-          this.updateBio = this.updateBio.bind(this);
-          this.handleAvatarToggle = this.handleAvatarToggle.bind(this);
-
+        this.handleSearchToggle = this.handleSearchToggle.bind(this);
+        this.updateBio = this.updateBio.bind(this);
+        this.handleAvatarToggle = this.handleAvatarToggle.bind(this);
     }
 
     async componentDidMount() {
-        console.log('check');
-        const result = await axios.get('/api/user');
+        console.log("check");
+        const result = await axios.get("/api/user");
         this.setState({
             bio: result.data.bio,
             email: result.data.email,
@@ -42,12 +41,12 @@ export default class App extends React.Component {
             profilepic: result.data.pic,
             username: result.data.username,
             yourname: result.data.yourname,
-            
         });
 
         if (!this.state.profilepic) {
             this.setState({
-                profilepic: 'https://d33epyjwhmr3r5.cloudfront.net/cms/images/sandbox/madhuontap.svg'
+                profilepic:
+                    "https://d33epyjwhmr3r5.cloudfront.net/cms/images/sandbox/madhuontap.svg",
             });
         }
     }
@@ -64,69 +63,116 @@ export default class App extends React.Component {
     handleSearchToggle() {
         this.setState({ searchToggle: !this.state.searchToggle });
     }
-    handleAvatarToggle (){
-        console.log('toggle is activated');
-        
-        this.setState({ avatarToggle: !this.state.avatarToggle });
+    handleAvatarToggle() {
+        console.log("toggle is activated");
+
+        this.setState({ avatarToggle: !this.state.avatarToggle }, () => {
+            console.log(this.state);
+        });
         location.replace("/logout");
     }
-    
+
     render() {
         return (
             <div>
-                {this.state.avatarToggle && <Avatar
-                    className="avatar"
-                    username={this.state.username}
-                    profilepic={this.state.profilepic}
-                    handleImgClick={this.handleImgClick}
-                    handleSearchToggle={this.handleSearchToggle}
-                    handleAvatarToggle={this.handleAvatarToggle}
-                />}
-                
-                {this.state.searchToggle &&
-                    <Search
-                        className="search"
-                        profilepic={this.state.profilepic}
-                        username={this.state.username}
-                        updateImg={this.updateImg}
-                    />}
-
-                {this.state.uploaderToggle &&
-                    <Uploader
-                        className="zoomAvatar"
-                        profilepic={this.state.profilepic}
-                        username={this.state.username}
-                        updateImg={this.updateImg}
-                    />}
-
                 <BrowserRouter>
-                    <Route
-                        exact
-                        path="/"
-                        render={() =>
-                            <div>
-                                <Profile
+                    <nav>
+                        <ul className="menu-nav">
+                            <Link to="/" className="menu-nav__item">
+                                home
+                            </Link>
+                            <div
+                                onClick={this.handleSearchToggle}
+                                className="menu-nav__item"
+                            >
+                                search
+                            </div>
+                            <div
+                                onClick={this.handleSearchToggle}
+                                className="menu-nav__item"
+                            >
+                                messages
+                            </div>
+                            <div
+                                onClick={this.handleSearchToggle}
+                                className="menu-nav__item"
+                            >
+                                shopping cart
+                            </div>
+                        </ul>
+                    </nav>
+                    <main>
+                        {this.state.avatarToggle && (
+                            <Avatar
+                                className="menu-nav__item avatar"
+                                username={this.state.username}
+                                profilepic={this.state.profilepic}
+                                handleImgClick={this.handleImgClick}
+                                handleAvatarToggle={this.handleAvatarToggle}
+                            />
+                        )}
+
+                        {this.state.searchToggle && (
+                            <Search
+                                className="search"
+                                profilepic={this.state.profilepic}
+                                username={this.state.username}
+                                updateImg={this.updateImg}
+                            />
+                        )}
+
+                        {this.state.uploaderToggle && (
+                            <Uploader
+                                className="zoomAvatar"
+                                profilepic={this.state.profilepic}
+                                username={this.state.username}
+                                updateImg={this.updateImg}
+                            />
+                        )}
+
+                        <Route
+                            exact
+                            path="/"
+                            render={() => (
+                                <div>
+                                    <Profile
+                                        username={this.state.username}
+                                        yourname={this.state.yourname}
+                                        bio={this.state.bio}
+                                        pic={this.state.profilepic}
+                                        updateBio={this.updateBio}
+                                        id={this.state.id}
+                                    />
+                                </div>
+                            )}
+                        />
+                        {/* <Route path="logout" component={Logout} /> */}
+                        <Route
+                            path="/user/:id"
+                            render={(props) => (
+                                <OtherProfile
+                                    key={props.match.url}
+                                    match={props.match}
+                                    history={props.history}
+                                />
+                            )}
+                        />
+                        <Route
+                            path="/logout"
+                            render={() => (
+                                <Logout
                                     username={this.state.username}
-                                    yourname={this.state.yourname}
-                                    bio={this.state.bio}
-                                    pic={this.state.profilepic}
-                                    updateBio={this.updateBio}
                                     id={this.state.id}
                                 />
-                            </div>}
-                    />
-                      <Route path = 'logout' component ={Logout}/>
-                    <Route
-                        path="/user/:id"
-                        render={props =>
-                            <OtherProfile key={props.match.url} match={props.match} history={props.history} />}
-                    />
-                    <Route path="/logout" render={() => <Logout username={this.state.username} id={this.state.id} />} />
-                    {/* <Route
+                            )}
+                        />
+                        {/* <Route
                         path="/search"
                         render={props =>
                             <OtherProfile key={props.match.url} match={props.match} history={props.history} />}
                     /> */}
+                    </main>
+                    <footer>copyright 2021 © Guitong Li</footer>
                 </BrowserRouter>
             </div>
         );
