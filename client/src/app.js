@@ -7,7 +7,7 @@ import { Route, BrowserRouter, Link } from "react-router-dom";
 import OtherProfile from "./other-profile";
 import Logout from "./logout";
 import Search from "./search";
-import Friends from './friends';
+import Friends from "./friends";
 
 export default class App extends React.Component {
     constructor() {
@@ -83,7 +83,13 @@ export default class App extends React.Component {
             <div>
                 <BrowserRouter>
                     <nav>
-                        <ul className="menu-nav">
+                        <Search
+                            className="search"
+                            profilepic={this.state.profilepic}
+                            username={this.state.username}
+                            updateImg={this.updateImg}
+                        />
+                        d<ul className="menu-nav">
                             <Link to="/" className="menu-nav__item">
                                 home
                             </Link>
@@ -101,14 +107,13 @@ export default class App extends React.Component {
                                 shopping cart
                             </div>
                         </ul>
+                        
                         <button
                             className="logout"
                             onClick={this.handleLogoutToggle}
                         >
                             logout
                         </button>
-                    </nav>
-                    <main>
                         {this.state.logoutToggle && (
                             <Logout className="menu-nav__item logout" />
                         )}
@@ -121,14 +126,8 @@ export default class App extends React.Component {
                                 handleAvatarToggle={this.handleAvatarToggle}
                             />
                         )}
-
-                        <Search
-                            className="search"
-                            profilepic={this.state.profilepic}
-                            username={this.state.username}
-                            updateImg={this.updateImg}
-                        />
-
+                    </nav>
+                    <section>
                         {this.state.uploaderToggle && (
                             <Uploader
                                 className="zoomAvatar"
@@ -174,8 +173,8 @@ export default class App extends React.Component {
                                 />
                             )}
                         />
-                        <Route path="/friends" component={Friends}/>
-                    </main>
+                        <Route path="/friends" component={Friends} />
+                    </section>
                     <footer>copyright 2021 © Guitong Li</footer>
                 </BrowserRouter>
             </div>

@@ -59,9 +59,60 @@
   color: #f4f1de;
 }
 
+.avatar {
+  display: flex;
+  position: absolute;
+  right: 10%;
+}
+
+.avatar img {
+  width: 10vw;
+  object-fit: none;
+  object-position: 50% 50%;
+}
+
+.friends {
+  display: flex;
+}
+
+.requests {
+  display: flex;
+}
+
+nav {
+  display: flex;
+}
+
+.menu-nav {
+  display: flex;
+}
+
+.search {
+  height: 20px;
+  position: absolute;
+}
+
+footer {
+  position: absolute;
+  top: 90%;
+}
+
+.logout {
+  position: absolute;
+  right: 20%;
+}
+
+.relations img {
+  height: 150px;
+  width: 130px;
+  object-fit: none;
+  object-position: 50% 50%;
+}
+
 body {
   background-color: #f4f1de;
   font-weight: 500;
   color: #3d405b;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 /*# sourceMappingURL=main.css.map */

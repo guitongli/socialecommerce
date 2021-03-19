@@ -1,36 +1,28 @@
-import axios from 'axios';
+import axios from "axios";
 
-export async function getFriends (){
-    const {data}  = await axios.get('/friends/getfriends');
-
+export async function getRelations() {
+    const { data } = await axios.get("/friends/getrelations");
+    console.log("got relations", data);
     return {
-        type:"GET_FRIENDS",
-        friends: data.friends
-    };
-}
-export async function getRequests (){
-    const {data} = await axios.get('friends/getrequests');
-    return {
-        type:"GET_REQUESTS",
-        requests: data.requests
+        type: "GET_RELATIONS",
+        relations: data.relations,
     };
 }
 
-
-export async function acceptRequest (hisId){
-    const {data} = await axios.get(`/friend/accept/${hisId}`);
+export async function acceptRequest(hisId) {
+    await axios.get(`/friend/accept/${hisId}`);
     return {
-        type:"ACCEPT_REQUEST",
-        stage: data.stage,
-        id:hisId
+        type: "ACCEPT_REQUEST",
+
+        hisId,
     };
 }
 
-export async function deleteRelation (hisId){
-    const {data} = await axios.get(`/friend/break/${hisId}`);
+export async function deleteRelation(hisId) {
+    await axios.get(`/friend/break/${hisId}`);
     return {
-        type:"DELETE_RELATION",
-        stage:data.stage,
-        id:hisId
+        type: "DELETE_RELATION",
+
+        hisId,
     };
 }

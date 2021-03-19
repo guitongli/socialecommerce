@@ -1,33 +1,36 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    getFriends,
-    getRequests,
-    acceptRequest,
-    deleteRelation,
-} from "./actions";
+
+import { getRelations, acceptRequest, deleteRelation } from "./actions";
 
 export default function Friends() {
     const dispatch = useDispatch();
-    const friends = useSelector((state) =>
-        state.visitors.filter((visitor) => visitor.accepted == true)
-    );
-    const requests = useSelector((state) =>
-        state.visitors.filter((visitor) => visitor.accepted == false)
-    );
+    const friends = useSelector((state) => {
+     return   state.relations && state.relations.filter((relation) => {
+            return relation.accepted == true;
+        });
+    });
+
+    const requests = useSelector((state) => {
+        return state.relations && state.relations.filter((relation) => !relation.accepted);
+    });
 
     useEffect(() => {
-        dispatch(getFriends());
-        dispatch(getRequests());
-        
+        dispatch(getRelations());
     }, []);
 
-    if (!friends && !requests) {
-        return null;
-    }
+    useEffect(() => {
+        if (!friends && !requests) {
+            console.log("i didnt get the state");
+            return null;
+        } else {
+            console.log("i got them in state!");
+        }
+    });
+
     return (
-        <div className="friends and requests">
+        <div className="relations">
             <div className="friends">
                 {friends &&
                     friends.map(function (friend) {
@@ -38,9 +41,13 @@ export default function Friends() {
                                     className="friends__item__img"
                                     src={friend.pic}
                                 />
-                                <button onClick ={
-                                    ()=> dispatch(deleteRelation(friend.id))
-                                }>delete</button>
+                                <button
+                                    onClick={() =>
+                                        dispatch(deleteRelation(friend.id))
+                                    }
+                                >
+                                    delete
+                                </button>
                             </div>
                         );
                     })}
@@ -56,12 +63,20 @@ export default function Friends() {
                                     className="requests__item__img"
                                     src={request.pic}
                                 />
-                                <button onClick ={
-                                    ()=> dispatch(acceptRequest(request.id))
-                                }>accept</button>
-                                <button onClick ={
-                                    ()=> dispatch(deleteRelation(request.id))
-                                }>delete</button>
+                                <button
+                                    onClick={() =>
+                                        dispatch(acceptRequest(request.id))
+                                    }
+                                >
+                                    accept
+                                </button>
+                                <button
+                                    onClick={() =>
+                                        dispatch(deleteRelation(request.id))
+                                    }
+                                >
+                                    delete
+                                </button>
                             </div>
                         );
                     })}

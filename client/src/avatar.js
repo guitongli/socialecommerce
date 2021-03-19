@@ -9,7 +9,7 @@ export default function Avatar(props) {
            
             
            
-            <h1>{props.username}</h1>
+             
             <img onClick={props.handleImgClick} src={props.profilepic}></img>
         </div>
     );

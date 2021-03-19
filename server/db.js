@@ -139,3 +139,16 @@ module.exports.acceptFriendship = (yourId, hisId) => {
     const params = [yourId, hisId];
     return db.query(q, params);
 };
+
+module.exports.getRelations = (yourId) => {
+    const q = `SELECT users.id, users.username, users.yourname, users.pic, friendships.accepted, friendships.recipient_id, friendships.sender_id
+    FROM friendships
+    JOIN users
+    ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
+     OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
+    OR (accepted = true AND sender_id = $1 AND sender_id = users.id);`;
+    const params = [yourId];
+    return db.query(q, params);
+};
+
+ 

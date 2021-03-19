@@ -1,35 +1,48 @@
-export default function reducer(state = {}, action) {
-    if (action.type == "GET_FRIENDS") {
+export default function Reducer(state = {}, action) {
+    console.log('reducer running');
+    if (action.type == "GET_RELATIONS") {
         state = {
             ...state,
-            friends: action.friends,
+            relations: action.relations,
         };
-        console.log(state);
+        console.log('updated relations', state);
         return state;
     }
-    if (action.type == "GET_REQUESTS") {
+     
+    if (action.type == "ACCEPT_REQUEST") {
         state = {
             ...state,
-            requests: action.requests,
-        };
-        console.log(state);
-        return state;
-    }
-    if (action.type == "ACCEPT_REQUEST" || action.type == "DELETE_RELATION") {
-        state = {
-            ...state,
-            requests: state.requests.map((request) => {
-                if (request.id == action.id) {
+            relations: state.relations.map((relation) => {
+                if (relation.id == action.hisId) {
+                    console.log('found the right one');
                     return {
-                        ...request,
-                        stage: action.stage,
+                        ...relation,
+                        accepted: true,
                     };
                 } else {
-                    return request;
+                    
+                    return relation;
                 }
             }),
         };
-        console.log(state);
-        return state;
     }
+    if (action.type == "DELETE_RELATION") {
+        state = {
+            ...state,
+            relations: state.relations.map((relation) => {
+                if (relation.id == action.hisId) {
+                    console.log('found the right one');
+                    return {
+                        ...relation,
+                        accepted: 'deleted',
+                    };
+                } else {
+                    
+                    return relation;
+                }
+            }),
+        };
+    }
+    console.log(state);
+    return state;
 }

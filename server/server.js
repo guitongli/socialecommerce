@@ -283,14 +283,13 @@ app.get("/friend/:method/:hisId", (req, res) => {
         db.checkFriendship(yourId, hisId)
             .then(({ rows }) => {
                 if (!rows[0]) {
-                    res.json({ stage: "follow" });
+                    res.json({ stage: "add" });
                 } else {
                     console.log(rows[0]);
                     if (
                         rows[0].accepted == false &&
                         rows[0].sender_id == yourId
                     ) {
-                      
                         res.json({ stage: "pending" });
                     } else if (
                         rows[0].accepted == false &&
@@ -323,6 +322,12 @@ app.get("/friend/:method/:hisId", (req, res) => {
         });
     }
 });
+app.get("/friends/getrelations", (req, res) => {
+    db.getRelations(req.session.userId).then(({ rows }) => {
+        console.log("relations came back", rows);
+        res.json({relations:rows});
+    });
+}); 
 
 app.get("/unlog", (req, res) => {
     console.log(req.session);
