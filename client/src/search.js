@@ -30,7 +30,7 @@ export default function Search() {
                     setSearchTerm(e.target.value);
                     console.log("what did you write", e.target.value);
                 }}
-                placeholder={searchTerm}
+                placeholder='search'
             ></input>
 
             {users &&

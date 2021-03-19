@@ -290,16 +290,15 @@ app.get("/friend/:method/:hisId", (req, res) => {
                         rows[0].accepted == false &&
                         rows[0].sender_id == yourId
                     ) {
-                        console.log("pending here");
-                        res.json({ stage: "sent" });
+                      
+                        res.json({ stage: "pending" });
                     } else if (
                         rows[0].accepted == false &&
                         rows[0].recipient_id == yourId
                     ) {
-                        console.log("pending here 2");
                         res.json({ stage: "accept request" });
                     } else if (rows[0].accepted == true) {
-                        res.json({ stage: "following" });
+                        res.json({ stage: "friend" });
                     }
                 }
             })
@@ -307,20 +306,20 @@ app.get("/friend/:method/:hisId", (req, res) => {
     } else if (method == "make") {
         db.makeFriendship(yourId, hisId).then(({ rows }) => {
             if (rows[0].id) {
-                res.json({ stage: "sent" });
+                res.json({ stage: "pending" });
             }
         });
     } else if (method == "break") {
         db.breakFriendship(yourId, hisId).then(({ rows }) => {
             console.log(rows);
             // if(rows[0].id){
-            res.json({ stage: "follow" });
+            res.json({ stage: "add" });
         });
     } else if (method == "accept") {
         db.acceptFriendship(yourId, hisId).then(({ rows }) => {
             console.log(rows);
             // if(rows[0].id){
-            res.json({ stage: "following" });
+            res.json({ stage: "friend" });
         });
     }
 });

@@ -8,8 +8,8 @@ import { Link, Router } from 'react-router-dom';
 //     }
 
 export default class Logout extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             error: false,
             email: '',
@@ -18,24 +18,20 @@ export default class Logout extends React.Component {
         };
     }
 
-    async componentDidMount() {
-        const result = await axios.get('/unlog', this.state);
+    async handleClick() {
+        const result = await axios.get('/unlog');
 
         console.log('i did log out', result);
-        if (result.data.success == true) {
-            this.setState({ error: false });
-        } else {
-            this.setState({ error: true });
-        }
+        
+        location.replace('/welcome');
     }
 
     render() {
         return (
-            <div> 
-                <h1> we will miss you.</h1>
-               
-                    <Link to="/welcome">Click here to login!</Link>
-                 
+            <div className='logout'> 
+
+                <h1> do you really want to go? we will miss you.</h1>
+                <button onClick={this.handleClick}>Logout</button>
             </div>
         );
     }

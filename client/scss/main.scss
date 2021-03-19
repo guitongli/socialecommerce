@@ -1,5 +1,6 @@
 @import "./resets", "./config";
 @import "./welcome", "./profile";
+@import "./components";
 
 @function weight($weight-name) {
     @return map-get($font-weights, $weight-name);

@@ -7,6 +7,7 @@ import { Route, BrowserRouter, Link } from "react-router-dom";
 import OtherProfile from "./other-profile";
 import Logout from "./logout";
 import Search from "./search";
+import Friends from './friends';
 
 export default class App extends React.Component {
     constructor() {
@@ -22,6 +23,7 @@ export default class App extends React.Component {
             uploaderToggle: false,
             searchToggle: false,
             avatarToggle: true,
+            logoutToggle: false,
         };
 
         this.handleImgClick = this.handleImgClick.bind(this);
@@ -29,6 +31,7 @@ export default class App extends React.Component {
         this.handleSearchToggle = this.handleSearchToggle.bind(this);
         this.updateBio = this.updateBio.bind(this);
         this.handleAvatarToggle = this.handleAvatarToggle.bind(this);
+        this.handleLogoutToggle = this.handleLogoutToggle.bind(this);
     }
 
     async componentDidMount() {
@@ -63,6 +66,9 @@ export default class App extends React.Component {
     handleSearchToggle() {
         this.setState({ searchToggle: !this.state.searchToggle });
     }
+    handleLogoutToggle() {
+        this.setState({ logoutToggle: !this.state.logoutToggle });
+    }
     handleAvatarToggle() {
         console.log("toggle is activated");
 
@@ -81,12 +87,7 @@ export default class App extends React.Component {
                             <Link to="/" className="menu-nav__item">
                                 home
                             </Link>
-                            <div
-                                onClick={this.handleSearchToggle}
-                                className="menu-nav__item"
-                            >
-                                search
-                            </div>
+
                             <div
                                 onClick={this.handleSearchToggle}
                                 className="menu-nav__item"
@@ -100,8 +101,17 @@ export default class App extends React.Component {
                                 shopping cart
                             </div>
                         </ul>
+                        <button
+                            className="logout"
+                            onClick={this.handleLogoutToggle}
+                        >
+                            logout
+                        </button>
                     </nav>
                     <main>
+                        {this.state.logoutToggle && (
+                            <Logout className="menu-nav__item logout" />
+                        )}
                         {this.state.avatarToggle && (
                             <Avatar
                                 className="menu-nav__item avatar"
@@ -112,14 +122,12 @@ export default class App extends React.Component {
                             />
                         )}
 
-                        {this.state.searchToggle && (
-                            <Search
-                                className="search"
-                                profilepic={this.state.profilepic}
-                                username={this.state.username}
-                                updateImg={this.updateImg}
-                            />
-                        )}
+                        <Search
+                            className="search"
+                            profilepic={this.state.profilepic}
+                            username={this.state.username}
+                            updateImg={this.updateImg}
+                        />
 
                         {this.state.uploaderToggle && (
                             <Uploader
@@ -166,11 +174,7 @@ export default class App extends React.Component {
                                 />
                             )}
                         />
-                        {/* <Route
-                        path="/search"
-                        render={props =>
-                            <OtherProfile key={props.match.url} match={props.match} history={props.history} />}
-                    /> */}
+                        <Route path="/friends" component={Friends}/>
                     </main>
                     <footer>copyright 2021 © Guitong Li</footer>
                 </BrowserRouter>

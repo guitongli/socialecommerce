@@ -1,16 +1,22 @@
 import ReactDOM from "react-dom";
 import Welcome from "./welcome";
-import {Provider} from "react-redux"
+import { Provider } from "react-redux";
 import App from "./app";
 
-const store
+import { createStore, applyMiddleware } from "redux";
+import { reducer } from "./reducer";
+import reduxPromise from "redux-promise";
+
+const store = createStore(reducer, applyMiddleware(reduxPromise));
 
 let elem;
-if (location.pathname === '/welcome'){
-    elem = < Welcome />;
+if (location.pathname === "/welcome") {
+    elem = <Welcome />;
 } else {
-
-    elem = 
-    <Provider>< App /></Provider>;
+    elem = (
+        <Provider store={store}>
+            <App />
+       </Provider> 
+    );
 }
 ReactDOM.render(elem, document.querySelector("main"));

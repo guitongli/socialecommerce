@@ -13,7 +13,7 @@ export function useStage() {
                     setStage(data.stage);
                 })
                 .catch((err) => console.log(err));
-        } else if (stage == "follow") {
+        } else if (stage == "add") {
              
             axios
                 .get(`/friend/make/${hisId}`)
@@ -25,7 +25,9 @@ export function useStage() {
             axios
                 .get(`/friend/accept/${hisId}`)
                 .then(({ data }) => setStage(data.stage));
-        } else if (stage == 'following'){
+        } else if (stage == 'friend'){
+            axios.get(`/friend/break/${hisId}`).then(({ data }) => setStage(data.stage));
+        } else if (stage == 'pending'){
             axios.get(`/friend/break/${hisId}`).then(({ data }) => setStage(data.stage));
         }
     };
