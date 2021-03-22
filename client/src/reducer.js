@@ -90,6 +90,27 @@ export default function Reducer(state = {}, action) {
         };
        
         return state;
+    }  
+    if (action.type == "CHATMESSAGES") {
+        console.log('reducer got msgs', action.msgs);
+        state = {
+            ...state,
+            chat_messages: action.msgs
+        };
+       
+        return state;
+    } 
+    if (action.type == "CHATMESSAGE") {
+        state = {
+            ...state,
+            chat_messages: [
+                ...state.chat_messages,
+                action.msg
+            ]
+            
+        };
+       
+        return state;
     } 
    
     console.log(state);

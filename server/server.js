@@ -1,11 +1,29 @@
 const express = require("express");
 const app = express();
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    allowRequest: (req, callback) =>
+        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+});
+
 const compression = require("compression");
+
+//question
+app.use(compression());
+
 const path = require("path");
 const { s3Email, s3Upload } = require("./s3");
 const { s3Url } = require("./config.json");
 const db = require("./db");
 const cookieSession = require("cookie-session");
+
+// app.use(
+//     cookieSession({
+//         secret: cookie_sec,
+//         maxAge: 1000 * 60 * 60 * 24,
+//         secure: false,
+//     })
+// );
 const { hash, compare } = require("./bc");
 const csrf = require("csurf");
 const cryptoRandomString = require("crypto-random-string");
@@ -34,6 +52,7 @@ const uploader = multer({
         fileSize: 2097152,
     },
 });
+
 // const bodyParser = require("body-parser");
 // const {
 //     checkLoggedIn,
@@ -48,14 +67,14 @@ if (process.env.COOKIE_SECRET) {
 } else {
     cookie_sec = require("./secrets.json").cookie_secret;
 }
-
-app.use(
-    cookieSession({
-        secret: cookie_sec,
-        maxAge: 1000 * 60 * 60 * 24,
-        secure: false,
-    })
-);
+const cookieSessionMiddleware = cookieSession({
+    secret: cookie_sec,
+    maxAge: 1000 * 60 * 60 * 24,
+});
+app.use(cookieSessionMiddleware);
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 app.use(csrf());
 
 app.use(function (req, res, next) {
@@ -337,11 +356,11 @@ app.get("/item/:id", (req, res) => {
     });
 });
 
-app.get('/like/:id', (req, res) => {
+app.get("/like/:id", (req, res) => {
     db.countLike(req.params.id).then(({ rows }) => {
         res.json({ count_like: rows });
     });
-})
+});
 
 app.post("/save/upload/item", uploader.single("file"), s3Upload, (req, res) => {
     const { item_name, item_des, item_price } = req.body;
@@ -386,6 +405,49 @@ app.get("*", function (req, res) {
     }
 });
 
-app.listen(process.env.PORT || 3001, function () {
+server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
+});
+
+io.on("connection", function (socket) {
+    console.log("socket comes with the id", socket.id);
+
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+
+    db.getMessages().then(({ rows }) => {
+        console.log("messages came", rows);
+        socket.emit("chatMessages", {
+            chat_messages: rows,
+        });
+    });
+
+    socket.on("chatMessage", function (data) {
+        console.log("msg", data);
+        db.saveMsg(data).then(({ rows }) => {
+            console.log("message", rows);
+            // io.emit('chatMessage',{
+            //    msg: data,
+            //    id:
+            //    username:
+            //    yourname:
+            //    pic:
+            // })
+        });
+    });
+    // socket.emit('new msg',{
+    //     message: 'hi world'
+    // });
+    // io.emit('broadcast',{
+    //     msg:
+    // });
+
+    // io.sockets.sockets.get(socket.id).emit("hello", {
+    //     msg:
+    // })
+
+    socket.on("disconnect", () => {
+        console.log("disconnected", socket.id);
+    });
 });

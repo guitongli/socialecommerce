@@ -168,13 +168,13 @@ module.exports.insertItem = (
 module.exports.getMyItems = (yourId) => {
     const q = `SELECT * FROM sales
     WHERE seller_id = $1 ;`;
-     const params = [yourId];
+    const params = [yourId];
     return db.query(q, params);
 };
 module.exports.getHisItems = (hisId) => {
     const q = `SELECT * FROM sales
     WHERE seller_id = $1 ;`;
-     const params = [hisId];
+    const params = [hisId];
     return db.query(q, params);
 };
 
@@ -182,12 +182,30 @@ module.exports.countLikes = (item_id) => {
     const q = `SELECT COUNT(liker_id)
 FROM likes
 WHERE item_id = $1;`;
-     const params = [item_id];
+    const params = [item_id];
     return db.query(q, params);
 };
 module.exports.getItem = (id) => {
     const q = `SELECT * FROM sales
     WHERE id = $1 ;`;
-     const params = [id];
+    const params = [id];
     return db.query(q, params);
 };
+
+module.exports.getMessages = () => {
+    const q = `SELECT * FROM messages 
+    JOIN users
+    ON (user_id=users.id)
+    LIMIT 10;`;
+    // const q =`SELECT TOP 10 * FROM Table ORDER BY ID DESC;`;
+    return db.query(q);
+};
+
+module.exports.insertItem = (user_id, content) => {
+    const q = `INSERT INTO messages (user_id, content)
+    VALUES($1, $2)
+    RETURNING *;`;
+    const params = [user_id, content];
+    return db.query(q, params);
+};
+    

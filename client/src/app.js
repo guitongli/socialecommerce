@@ -10,7 +10,7 @@ import Search from "./search";
 import Friends from "./friends";
 import ItemUpload from './item-upload';
 import ItemViewer from './item-viewer';
-
+import Chat from './chat'
 export default class App extends React.Component {
     constructor() {
         super();
@@ -190,6 +190,7 @@ export default class App extends React.Component {
                         <Route path="/friends" component={Friends} />
                     
                     <Route path="/sell" component={ItemUpload} />
+                    <Route path="/chat" component={Chat} />
                     </section>
                     <footer>copyright 2021 © Guitong Li</footer>
                 </BrowserRouter>
