@@ -238,13 +238,6 @@ app.get("/search/search/:input", (req, res) => {
 //     }
 // });
 app.post("/save/avatar", uploader.single("file"), s3Upload, (req, res) => {
-    // if (req.file) {
-    //     res.json({ succes: true });
-    // } else {
-    //     res.json({ success: false });
-    //     console.log("why");
-    // }
-
     console.log("file", req.file, "body", req.body);
 
     const { username } = req.body;
@@ -325,10 +318,57 @@ app.get("/friend/:method/:hisId", (req, res) => {
 app.get("/friends/getrelations", (req, res) => {
     db.getRelations(req.session.userId).then(({ rows }) => {
         console.log("relations came back", rows);
-        res.json({relations:rows});
+        res.json({ relations: rows });
     });
-}); 
+});
+app.get("/items/myitems", (req, res) => {
+    db.getMyItems(req.session.userId).then(({ rows }) => {
+        res.json({ my_items: rows });
+    });
+});
+app.get("/items/hisitems/:id", (req, res) => {
+    db.getHisItems(req.params.id).then(({ rows }) => {
+        res.json({ his_items: rows });
+    });
+});
+app.get("/item/:id", (req, res) => {
+    db.getItem(req.params.id).then(({ rows }) => {
+        res.json({ current_item: rows });
+    });
+});
 
+app.get('/like/:id', (req, res) => {
+    db.countLike(req.params.id).then(({ rows }) => {
+        res.json({ count_like: rows });
+    });
+})
+
+app.post("/save/upload/item", uploader.single("file"), s3Upload, (req, res) => {
+    const { item_name, item_des, item_price } = req.body;
+
+    const seller_Id = req.session.userId;
+    if (req.file.size > 300000) {
+        res.sendStatus("oversize");
+    }
+
+    const { filename } = req.file;
+    console.log(
+        "isert",
+        seller_Id,
+        item_name,
+        item_des,
+        s3Url + filename,
+        item_price
+    );
+    db.insertItem(seller_Id, item_name, item_des, s3Url + filename, item_price)
+        .then(({ rows }) => {
+            console.log(rows);
+            res.json({ success: true, link: s3Url + filename });
+        })
+        .catch((err) => {
+            console.log("save to dbitem problem", err);
+        });
+});
 app.get("/unlog", (req, res) => {
     console.log(req.session);
 

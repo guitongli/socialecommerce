@@ -8,6 +8,8 @@ import OtherProfile from "./other-profile";
 import Logout from "./logout";
 import Search from "./search";
 import Friends from "./friends";
+import ItemUpload from './item-upload';
+import ItemViewer from './item-viewer';
 
 export default class App extends React.Component {
     constructor() {
@@ -165,6 +167,18 @@ export default class App extends React.Component {
                             )}
                         />
                         <Route
+                            path="/marketplace/:id"
+                            render={(props) => (
+                                <ItemViewer
+                                    key={props.match.url}
+                                    match={props.match}
+                                    history={props.history}
+                                />
+
+                            )}
+                        />
+
+                        <Route
                             path="/logout"
                             render={() => (
                                 <Logout
@@ -174,6 +188,8 @@ export default class App extends React.Component {
                             )}
                         />
                         <Route path="/friends" component={Friends} />
+                    
+                    <Route path="/sell" component={ItemUpload} />
                     </section>
                     <footer>copyright 2021 © Guitong Li</footer>
                 </BrowserRouter>

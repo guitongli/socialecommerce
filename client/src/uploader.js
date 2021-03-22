@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "./axios";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 export default class Uploader extends React.Component {
     constructor(props) {
@@ -27,7 +27,7 @@ export default class Uploader extends React.Component {
         this.setState({ file: e.target.files[0] });
     }
 
-    handleClick(e) {
+    handleClick() {
         // var file = myFileInput.files[0];
         console.log("click", this.state.username);
         var formData = new FormData();

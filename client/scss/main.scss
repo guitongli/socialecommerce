@@ -6,8 +6,96 @@
     @return map-get($font-weights, $weight-name);
 }
 body {
-    background-color: $base-color;
+    width: 100%;
+    height: 100%;
+    background: #ededed;
     font-weight: weight(medium);
     color: $coolnavy;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+* {
+    box-sizing: border-box;
+}
+
+.heart-wrapper {
+    padding-top: 50px;
+
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: lightblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    text-decoration: none;
+    overflow: hidden;
+
+    i {
+        &.not-liked {
+            visibility: visible;
+            color: whitesmoke;
+            position: relative;
+            z-index: 1;
+        }
+        &.is-liked {
+            visibility: hidden;
+            color: whitesmoke;
+            position: relative;
+            z-index: 1;
+        }
+    }
+    &.is-active {
+        i {
+            &.not-liked {
+                visibility: hidden;
+            }
+            &.is-liked {
+                visibility: visible;
+            }
+        }
+    }
+}
+
+//Watch me get bouncy
+@-webkit-keyframes bouncy {
+    from,
+    to {
+        -webkit-transform: scale(1, 1);
+    }
+    25% {
+        -webkit-transform: scale(0.9, 1.1);
+    }
+    50% {
+        -webkit-transform: scale(1.1, 0.9);
+    }
+    75% {
+        -webkit-transform: scale(0.95, 1.05);
+    }
+}
+@keyframes bouncy {
+    from,
+    to {
+        transform: scale(1, 1);
+    }
+    25% {
+        transform: scale(0.9, 1.1);
+    }
+    50% {
+        transform: scale(1.1, 0.9);
+    }
+    75% {
+        transform: scale(0.95, 1.05);
+    }
+}
+
+//Settings
+.bouncy {
+    -webkit-animation: bouncy 0.6s;
+    animation: bouncy 0.6s;
+    -webkit-animation-duration: 0.6s;
+    animation-duration: 0.6s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
 }

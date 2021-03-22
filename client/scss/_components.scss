@@ -1,0 +1,100 @@
+@import "./config";
+
+.avatar {
+    display: flex;
+    img {
+        margin-top: 20px;
+        width: 100px;
+        height: 100px;
+        object-fit: none;
+        object-position: 50% 50%;
+    }
+    position: absolute;
+    right: 10%;
+}
+
+.friends {
+    display: flex;
+}
+.requests {
+    display: flex;
+}
+nav {
+    display: flex;
+}
+.menu-nav {
+    display: flex;
+}
+
+.search {
+    height: 20px;
+    position: absolute;
+}
+
+footer {
+    position: relative;
+    bottom: 0;
+}
+
+.logout {
+    position: absolute;
+    right: 20%;
+}
+
+.relations {
+    img {
+        height: 150px;
+        width: 130px;
+        object-fit: none;
+        object-position: 50% 50%;
+    }
+}
+
+.search {
+    &__list {
+        background-color: $wallgreen;
+        width: 100vw;
+        height: 90vh;
+        position: relative;
+        &__wrapper {
+            width: 80vw;
+            height: 60vw;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            position: absolute;
+            top: 100px;
+
+            img {
+                height: 100px;
+                width: 100px;
+                object-fit: none;
+                object-position: 50% 50%;
+            }
+        }
+    }
+}
+
+.item-uploader {
+    position: relative;
+    top: 200px;
+}
+
+.my-items {
+    &__list {
+        display: flex;
+        justify-content: space-around;
+
+        img {
+            height: 200px;
+            width: 200px;
+        }
+    }
+}
+
+.item-viewer {
+    &__img {
+        height: 200px;
+        width: 200px;
+    }
+}

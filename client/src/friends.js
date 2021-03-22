@@ -7,27 +7,25 @@ import { getRelations, acceptRequest, deleteRelation } from "./actions";
 export default function Friends() {
     const dispatch = useDispatch();
     const friends = useSelector((state) => {
-     return   state.relations && state.relations.filter((relation) => {
-            return relation.accepted == true;
-        });
+        return (
+            state.relations &&
+            state.relations.filter((relation) => {
+                return relation.accepted == true;
+            })
+        );
     });
 
     const requests = useSelector((state) => {
-        return state.relations && state.relations.filter((relation) => !relation.accepted);
+        return (
+            state.relations &&
+            state.relations.filter((relation) => !relation.accepted)
+        );
     });
 
     useEffect(() => {
         dispatch(getRelations());
     }, []);
-
-    useEffect(() => {
-        if (!friends && !requests) {
-            console.log("i didnt get the state");
-            return null;
-        } else {
-            console.log("i got them in state!");
-        }
-    });
+ 
 
     return (
         <div className="relations">
@@ -36,11 +34,13 @@ export default function Friends() {
                     friends.map(function (friend) {
                         return (
                             <div className="friends__item" key={friend.id}>
-                                {friend.username} <p>{friend.yourname}</p>
-                                <img
-                                    className="friends__item__img"
-                                    src={friend.pic}
-                                />
+                                <Link to={{ pathname: `/user/${friend.id}` }}>
+                                    {friend.username} <p>{friend.yourname}</p>
+                                    <img
+                                        className="friends__item__img"
+                                        src={friend.pic}
+                                    />
+                                </Link>
                                 <button
                                     onClick={() =>
                                         dispatch(deleteRelation(friend.id))

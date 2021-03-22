@@ -151,4 +151,43 @@ module.exports.getRelations = (yourId) => {
     return db.query(q, params);
 };
 
- 
+module.exports.insertItem = (
+    seller_id,
+    item_name,
+    item_des,
+    item_pic,
+    item_price
+) => {
+    const q = `INSERT INTO sales (seller_id, item_name, item_des, item_pic, item_price)
+    VALUES($1, $2, $3, $4, $5)
+    RETURNING *;`;
+    const params = [seller_id, item_name, item_des, item_pic, item_price];
+    return db.query(q, params);
+};
+
+module.exports.getMyItems = (yourId) => {
+    const q = `SELECT * FROM sales
+    WHERE seller_id = $1 ;`;
+     const params = [yourId];
+    return db.query(q, params);
+};
+module.exports.getHisItems = (hisId) => {
+    const q = `SELECT * FROM sales
+    WHERE seller_id = $1 ;`;
+     const params = [hisId];
+    return db.query(q, params);
+};
+
+module.exports.countLikes = (item_id) => {
+    const q = `SELECT COUNT(liker_id)
+FROM likes
+WHERE item_id = $1;`;
+     const params = [item_id];
+    return db.query(q, params);
+};
+module.exports.getItem = (id) => {
+    const q = `SELECT * FROM sales
+    WHERE id = $1 ;`;
+     const params = [id];
+    return db.query(q, params);
+};
