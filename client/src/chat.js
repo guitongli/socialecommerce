@@ -11,48 +11,53 @@ export default function Chat() {
     const keyCheck = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            console.log('text', e.target.value)
-            // socket.emit("chatMessage", e.target.value);
+            // console.log('text', e.target.value)
+            socket.emit("chatMessage", e.target.value);
         }
     };
 
     const elemRef = useRef();
     useEffect(() => {
-        console.log(
-            "measurements",
-            elemRef.current,
-            elemRef.current.scrollTop,
-            elemRef.current.scrollHeight,
-            elemRef.current.clientHeight
-        );
-        elemRef.current.scrollTop =
-            elemRef.current.scrollHeght - elemRef.current.clientHeight;
+
+        elemRef.current.scrollTop  =
+            elemRef.current.scrollHeight - (0.8 * window.innerHeight);
+            // elemRef.current.clientHeight;
+            console.log(
+                "measurements",
+                elemRef.current.scrollTop,
+                
+                elemRef.current.scrollHeight,
+                elemRef.current.clientHeight,
+                // newRollTop
+            );
     }, []);
-    useEffect(() => {
-        if (chatMessages) {
-            console.log("is it an array", chatMessages);
-        }
-    });
+
     return (
         <>
-            <div className ='chat' ref={elemRef}>
-                {chatMessages &&
-                    // console.log('in element', chatMessages)
-                    chatMessages.chat_messages.map((chatMessage) => {
-                        return (
-                            <div key={chatMessage.id}>
-                                {chatMessage.username}
-                                <img className = 'chat__item' src={chatMessage.pic} />
-                                {chatMessage.content}
-                            </div>
-                        );
-                    })}
+            <div className="chat" ref={elemRef}>
+                <div className="chat__wrapper">
+                    {chatMessages &&
+                        // console.log('in element', chatMessages)
+                        chatMessages.map((chatMessage) => {
+                            return (
+                                <div
+                                    className="chat__item"
+                                    key={chatMessage.id}
+                                >
+                                    {chatMessage.username}
+                                    <img src={chatMessage.pic} />
+                                    {chatMessage.content}
+                                </div>
+                            );
+                        })}
+                </div>
                 <textarea
                     placeholder="hit enter to send"
                     onKeyDown={(e) => {
                         keyCheck(e);
                     }}
                 ></textarea>
+                ;
             </div>
         </>
     );

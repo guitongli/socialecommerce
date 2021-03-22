@@ -416,25 +416,33 @@ io.on("connection", function (socket) {
         return socket.disconnect(true);
     }
 
-    db.getMessages().then(({ rows }) => {
-        console.log("messages came", rows);
+    db.getMessages().then(({ rows }) => { 
+        console.log('date changed', rows)
         socket.emit("chatMessages", {
             chat_messages: rows,
         });
     });
 
-    socket.on("chatMessage", function (data) {
-        console.log("msg", data);
-        db.saveMsg(data).then(({ rows }) => {
-            console.log("message", rows);
-            // io.emit('chatMessage',{
-            //    msg: data,
-            //    id:
-            //    username:
-            //    yourname:
-            //    pic:
-            // })
-        });
+    socket.on("chatMessage", function (content) {
+        const user_id = socket.request.session.userId;
+        console.log(user_id);
+        const new_message = {};
+
+        db.saveMsg(user_id, content).then(({ rows }) => {
+            const { content, id } = rows[0];
+             
+            new_message.content = content;
+            new_message.id = id;
+
+            db.getId(user_id).then(({ rows }) => {
+                const { username, yourname, pic } = rows[0];
+               
+                new_message.username = username;
+                new_message.yourname = yourname;
+                new_message.pic = pic;
+                io.emit("chatMessage", new_message);
+            });
+        }).catch((err)=>console.log(err));
     });
     // socket.emit('new msg',{
     //     message: 'hi world'

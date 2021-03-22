@@ -10,7 +10,7 @@ export const init = store => {
         socket.on(
             'chatMessages',
             (msgs) => {console.log('messages came', msgs); store.dispatch(
-                chatMessages(msgs)
+                chatMessages(msgs.chat_messages.reverse())
             );}
         );
 

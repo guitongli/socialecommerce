@@ -193,19 +193,22 @@ module.exports.getItem = (id) => {
 };
 
 module.exports.getMessages = () => {
-    const q = `SELECT * FROM messages 
+    const q = `SELECT messages.created_at, users.username,
+    messages.user_id, users.pic, messages.content, messages.id
+    FROM messages 
     JOIN users
     ON (user_id=users.id)
+    ORDER by messages.created_at DESC
     LIMIT 10;`;
     // const q =`SELECT TOP 10 * FROM Table ORDER BY ID DESC;`;
     return db.query(q);
 };
 
-module.exports.insertItem = (user_id, content) => {
+module.exports.saveMsg = (user_id, content) => {
     const q = `INSERT INTO messages (user_id, content)
     VALUES($1, $2)
     RETURNING *;`;
-    const params = [user_id, content];
+     const params = [user_id, content];
     return db.query(q, params);
 };
     

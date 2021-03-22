@@ -98,3 +98,20 @@ footer {
         width: 200px;
     }
 }
+
+.chat {
+    &__wrapper {
+        height: 80vh;
+        width: 80vw;
+        overflow-y: auto;
+        img {
+            height: 40px;
+            width: 40px;
+            object-fit: cover;
+            object-position: 50% 50%;
+        }
+    }
+    &__item {
+        margin-top: 20px;
+    }
+}
