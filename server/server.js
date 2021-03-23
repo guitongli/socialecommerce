@@ -104,7 +104,13 @@ app.post("/signup", (req, res) => {
         hash(password)
             .then((hashedkeys) => {
                 return db
-                    .insertUser(username, yourname, email, hashedkeys)
+                    .insertUser(
+                        username,
+                        yourname,
+                        email,
+                        hashedkeys,
+                        "https://d33epyjwhmr3r5.cloudfront.net/cms/images/sandbox/madhuontap.svg"
+                    )
                     .then((returns) => {
                         console.log("inserted user to db", returns);
                         req.session.userEmail = email;
@@ -189,10 +195,13 @@ app.post("/verification/sendemail", (req, res) => {
 
 app.post("/verification", (req, res) => {
     console.log(req.body);
-    db.getCode(req.body.email).then(({ rows }) => {
+    db.getCode(req.session.userEmail).then(({ rows }) => {
         console.log(rows);
+        console.log(secretCode);
         if (rows[0].code == secretCode) {
             res.json({ success: true });
+        } else {
+            console.log("problem with secret code");
         }
     });
 });
@@ -340,6 +349,11 @@ app.get("/friends/getrelations", (req, res) => {
         res.json({ relations: rows });
     });
 });
+app.get("/items/updates", (req, res) => {
+    db.getUpdates().then(({ rows }) => {
+        res.json({ updates: rows });
+    });
+});
 app.get("/items/myitems", (req, res) => {
     db.getMyItems(req.session.userId).then(({ rows }) => {
         res.json({ my_items: rows });
@@ -409,53 +423,89 @@ server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
 
+let onlineUsers = {};
 io.on("connection", function (socket) {
     console.log("socket comes with the id", socket.id);
 
     if (!socket.request.session.userId) {
         return socket.disconnect(true);
+    } else {
+        onlineUsers[socket.id] = socket.request.session.userId;
+        io.emit("usersOnline", onlineUsers);
     }
-
-    db.getMessages().then(({ rows }) => { 
-        console.log('date changed', rows)
+    db.getMessages().then(({ rows }) => {
         socket.emit("chatMessages", {
             chat_messages: rows,
         });
     });
 
+    db.getPM(socket.request.session.userId).then(({ rows }) => {
+        console.log("retrieved private messages", rows);
+        io.sockets.sockets.get(socket.id).emit("privateMessages", {
+            private_messages: rows,
+        });
+    }).catch(err=>console.log(err));
     socket.on("chatMessage", function (content) {
         const user_id = socket.request.session.userId;
         console.log(user_id);
         const new_message = {};
 
-        db.saveMsg(user_id, content).then(({ rows }) => {
-            const { content, id } = rows[0];
-             
-            new_message.content = content;
-            new_message.id = id;
+        db.saveMsg(user_id, content)
+            .then(({ rows }) => {
+                const { content, id } = rows[0];
 
-            db.getId(user_id).then(({ rows }) => {
-                const { username, yourname, pic } = rows[0];
-               
-                new_message.username = username;
-                new_message.yourname = yourname;
-                new_message.pic = pic;
-                io.emit("chatMessage", new_message);
-            });
-        }).catch((err)=>console.log(err));
+                new_message.content = content;
+                new_message.id = id;
+
+                db.getId(user_id).then(({ rows }) => {
+                    const { username, yourname, pic } = rows[0];
+
+                    new_message.username = username;
+                    new_message.yourname = yourname;
+                    new_message.pic = pic;
+
+                    socket.emit("chatMessage", new_message);
+                });
+            })
+            .catch((err) => console.log(err));
     });
-    // socket.emit('new msg',{
-    //     message: 'hi world'
-    // });
-    // io.emit('broadcast',{
-    //     msg:
-    // });
 
-    // io.sockets.sockets.get(socket.id).emit("hello", {
-    //     msg:
-    // })
+    socket.on("privateMessage", function (data) {
+        const { hisId, content } = data;
+        const myId = socket.request.session.userId;
+        console.log(myId);
+        const new_message = {};
+
+        db.savePM(myId, hisId, content)
+            .then(({ rows }) => {
+                const { sender_id, recipient_id, content } = rows[0];
+
+                new_message.content = content;
+                new_message.sender_id = sender_id;
+                new_message.recipient_id = recipient_id;
+
+                db.getId(sender_id).then(({ rows }) => {
+                    const { username, yourname, pic } = rows[0];
+
+                    new_message.username = username;
+                    new_message.yourname = yourname;
+                    new_message.pic = pic;
+
+                    for (var socket_id in onlineUsers) {
+                        if (onlineUsers[socket_id] == recipient_id || sender_id) {
+                            io.sockets.sockets
+                                .get(socket_id)
+                                .emit("privateMessage", new_message);
+                        }
+                    }
+                });
+            })
+            .catch((err) => console.log(err));
+    });
 
     socket.on("disconnect", () => {
         console.log("disconnected", socket.id);
+        delete onlineUsers[socket.id];
+        io.emit("usersOnline", onlineUsers);
     });
 });

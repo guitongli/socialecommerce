@@ -1,3 +1,4 @@
+drop table if exists pm;
 drop table if exists messages;
 drop table if exists likes;
 drop table if exists sales;
@@ -56,6 +57,16 @@ CREATE TABLE messages(
     id SERIAL PRIMARY KEY, 
     user_id INT REFERENCES users(id) NOT NULL, 
 
+    content TEXT NOT NULL, 
+     
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+
+CREATE TABLE pm (
+    id SERIAL PRIMARY KEY, 
+    sender_id INT REFERENCES users(id) NOT NULL, 
+recipient_id INT REFERENCES users(id) NOT NULL, 
     content TEXT NOT NULL, 
      
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

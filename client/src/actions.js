@@ -59,6 +59,15 @@ export async function getMyItems() {
         my_items: data.my_items,
     };
 }
+export async function getHisItems(hisId) {
+    const { data } = await axios.get(`/items/hisitems/${hisId}`);
+    return {
+        type: "GET_HIS_ITEMS",
+
+        his_items: data.his_items,
+    };
+}
+
 
 export function updateClickedItem(item_id) {
     return {
@@ -95,6 +104,31 @@ export function chatMessages(msgs) {
 export function chatMessage(msg) {
     return {
         type: "CHATMESSAGE",
+
+        msg,
+    };
+}
+
+export async function getUpdates() {
+    const { data } = await axios.get(`/items/updates`);
+    console.log('served updates', data)
+    return {
+        type: "GET_UPDATES",
+
+        updates: data.updates,
+    };
+}
+
+export function privateMessages(msgs) {
+    return {
+        type: "PRIVATE_MESSAGES",
+
+        msgs,
+    };
+}
+export function privateMessage(msg) {
+    return {
+        type: "PRIVATE_MESSAGE",
 
         msg,
     };

@@ -115,3 +115,82 @@ footer {
         margin-top: 20px;
     }
 }
+
+nav {
+    height: 80px;
+    background-color: whitesmoke;
+    box-shadow: 5px 10px $wallgreen inset;
+    height: 70px;
+}
+
+.logo {
+    width: 70px;
+}
+
+.updates {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100vw;
+    height: 100vh;
+    &__item {
+        border-radius: 5px;
+        border-color: gray;
+        margin: 10px, 10px, 10px, 10px;
+        height: 450px;
+        width: 400px;
+        &__relation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        &__small-pic {
+            height: 50px;
+            width: 50px;
+            object-fit: cover;
+            object-position: 50% 50%;
+        }
+        &__big-pic {
+            height: 300px;
+            width: 400px;
+            object-fit: cover;
+            object-position: 50% 50%;
+        }
+    }
+}
+.friend-button {
+    width: 100px;
+    button {
+        height: 30px;
+        width: 100px;
+        cursor: pointer;
+        border-radius: 5px;
+        background-color: $zhusha;
+        color: $coolnavy;
+    }
+}
+
+.others {
+    display: flex;
+    justify-content: space-around;
+    &__info {
+        height: 100vh;
+        width: 30vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    &__items {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 60vw;
+    }
+}
+
+.his-items {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 60vw;
+}

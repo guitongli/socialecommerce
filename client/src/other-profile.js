@@ -2,7 +2,8 @@ import React from "react";
 import axios from "./axios";
 // import { Link } from "react-router-dom";
 import FriendButton from "./friend-button";
-
+import HisItems from "./items-his";
+import Private from "./private";
 export default class OtherProfile extends React.Component {
     constructor(props) {
         super(props);
@@ -49,11 +50,21 @@ export default class OtherProfile extends React.Component {
     render() {
         return (
             <div className="others">
-                <h1>{this.state.username}</h1>
-                <img src={this.state.pic} />
-                <h1>{this.state.yourname}</h1>
-                <p>{this.state.bio}</p>
-                <FriendButton hisId={this.props.match.params.id} />
+                <div className="others__info">
+                    <h1>
+                        {this.state.username} {this.state.yourname}
+                    </h1>
+                    <img src={this.state.pic} />
+
+                    <p>{this.state.bio}</p>
+
+                    <FriendButton hisId={this.props.match.params.id} />
+                </div>
+                <div className="other__items">
+                    <h1>{this.state.username}'s Collection</h1>
+                    <HisItems hisId={this.props.match.params.id} />
+                </div>
+                <Private hisId={this.props.match.params.id} />
             </div>
         );
     }

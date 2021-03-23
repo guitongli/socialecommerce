@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import axios from "./axios";
+import { useEffect } from "react";
+// import axios from "./axios";
 import { useStage } from "./useStage";
 
 export default function FriendButton(props) {
@@ -10,17 +10,23 @@ export default function FriendButton(props) {
 
     useEffect(function () {
         getStage(props.hisId);
-        console.log('prop id', props.hisId);
+        console.log("prop id", props.hisId);
     }, []);
 
-    function handleClick(){ 
+    function handleClick() {
         getStage(props.hisId);
     }
 
     return (
-        <div>
-            <button onClick={e => {e.preventDefault(
-            );handleClick()}}>{stage}</button>
+        <div className="friend-button">
+            <button
+                onClick={(e) => {
+                    e.preventDefault();
+                    handleClick();
+                }}
+            >
+                {stage}
+            </button>
         </div>
     );
 }

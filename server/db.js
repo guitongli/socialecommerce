@@ -7,12 +7,12 @@ if (process.env.DATABASE_URL) {
     db = spicedPg(`postgres:postgres:postgres@localhost:5432/socialnetwork`);
 }
 
-module.exports.insertUser = (username, yourname, email, hashkeys) => {
+module.exports.insertUser = (username, yourname, email, hashkeys, pic) => {
     const q = `INSERT INTO users (username, yourname, email, hashkeys, bio, pic)
-    VALUES($1, $2, $3, $4, null, null)
+    VALUES($1, $2, $3, $4, null, $5)
     RETURNING *;`;
 
-    const params = [username, yourname, email, hashkeys];
+    const params = [username, yourname, email, hashkeys, pic];
 
     return db.query(q, params);
 };
@@ -151,6 +151,16 @@ module.exports.getRelations = (yourId) => {
     return db.query(q, params);
 };
 
+module.exports.getUpdates = () => {
+    const q = `SELECT users.id AS user_id, users.username, users.yourname, users.pic, sales.seller_id, sales.item_name, sales.id AS item_id, sales.item_pic, sales.item_price
+    FROM sales
+    JOIN users
+    ON (sales.seller_id = users.id)
+    LIMIT 10;`;
+
+    return db.query(q);
+};
+
 module.exports.insertItem = (
     seller_id,
     item_name,
@@ -208,7 +218,27 @@ module.exports.saveMsg = (user_id, content) => {
     const q = `INSERT INTO messages (user_id, content)
     VALUES($1, $2)
     RETURNING *;`;
-     const params = [user_id, content];
+    const params = [user_id, content];
     return db.query(q, params);
 };
-    
+
+module.exports.savePM = (sender_id, recipient_id, content) => {
+    const q = `INSERT INTO pm (sender_id, recipient_id, content)
+    VALUES($1, $2, $3)
+    RETURNING *;`;
+    const params = [sender_id, recipient_id, content];
+    return db.query(q, params);
+};
+module.exports.getPM = (myId) => {
+    const q = `SELECT users.id, pm.sender_id, pm.created_at, pm.recipient_id, users.pic, users.username, users.yourname, pm.content, pm.id AS pm_id
+    FROM pm
+    JOIN users
+    ON (pm.sender_id=$1 AND pm.recipient_id=users.id)
+    OR (pm.recipient_id = $1 AND pm.sender_id = users.id) 
+    ORDER by pm.created_at DESC
+    LIMIT 10;`;
+    // const q =`SELECT TOP 10 * FROM Table ORDER BY ID DESC;`;
+    const params = [myId];
+    return db.query(q, params);
+};
+   

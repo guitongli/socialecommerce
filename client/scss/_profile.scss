@@ -9,4 +9,10 @@
             color: $base-color;
         }
     }
+    img {
+        height: 150px;
+        width: 150px;
+        object-fit: cover;
+        object-position: 50% 50%;
+    }
 }

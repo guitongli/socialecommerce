@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 export default function Chat() {
     const chatMessages = useSelector((state) => {
-        console.log("arrived in chat", state && state.chat_messages);
+        // console.log("arrived in chat", state && state.chat_messages);
         return state && state.chat_messages;
     });
 
@@ -18,19 +18,19 @@ export default function Chat() {
 
     const elemRef = useRef();
     useEffect(() => {
+        console.log();
+        elemRef.current.scrollTop =
+            elemRef.current.scrollHeight;
+        // elemRef.current.clientHeight;
+        console.log(
+            "measurements",
+            elemRef.current.scrollTop,
 
-        elemRef.current.scrollTop  =
-            elemRef.current.scrollHeight - (0.8 * window.innerHeight);
-            // elemRef.current.clientHeight;
-            console.log(
-                "measurements",
-                elemRef.current.scrollTop,
-                
-                elemRef.current.scrollHeight,
-                elemRef.current.clientHeight,
-                // newRollTop
-            );
-    }, []);
+            elemRef.current.scrollHeight,
+            elemRef.current.clientHeight
+            // newRollTop
+        );
+    });
 
     return (
         <>

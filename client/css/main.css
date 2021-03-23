@@ -5,35 +5,65 @@
 }
 
 .welcome {
-  width: 100%;
-  background: linear-gradient(to right, rgba(129, 178, 154, 0.9), rgba(129, 178, 154, 0.3)), url("../public/super woman.png");
-  margin: 0 auto;
-  justify-content: center;
+  width: 100vw;
+  height: 100vw;
+  overflow: hidden;
+  background-image: linear-gradient(rgba(222, 222, 222, 0.1), rgba(233, 233, 233, 0.5));
+}
+
+.welcome img {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: 80% 50%;
+  z-index: -1;
+}
+
+.welcome .welcome__overlay {
   display: flex;
-  align-items: center;
   flex-direction: column;
-}
-
-.welcome .welcome__title {
+  justify-content: space-around;
   font-weight: weight(bold);
-  color: #e07a5f;
+  color: #3d405b;
+  position: relative;
+  background-color: rgba(253, 253, 233, 0.5);
+  width: 24vw;
+  height: 60vh;
+  position: absolute;
+  top: 20%;
+  left: 20%;
 }
 
-.welcome .welcome__formbutton {
-  border-radius: 5px;
-  background-color: #3d405b;
-  color: #f4f1de;
-}
-
-.welcome .welcome__formbutton:hover {
-  color: palegoldenrod;
-  background-color: #81b29a;
+.welcome .welcome__overlay h1 {
+  text-align: center;
 }
 
 .welcome__form {
   display: flex;
   align-items: center;
   flex-direction: column;
+  align-content: space-around;
+  text-decoration: center;
+}
+
+.welcome__form input {
+  background-color: rgba(253, 253, 233, 0.5);
+  border-radius: 5px;
+  border-color: #f4f1de;
+  margin-bottom: 10px;
+}
+
+.welcome .welcome__formbutton {
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #3d405b;
+}
+
+.welcome .welcome__formbutton:hover {
+  color: palegoldenrod;
+  background-color: #81b29a;
 }
 
 @media (max-width: 800px) {
@@ -57,6 +87,13 @@
 
 .profile h1:hover {
   color: #f4f1de;
+}
+
+.profile img {
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+  object-position: 50% 50%;
 }
 
 .avatar {
@@ -170,6 +207,93 @@ footer {
 
 .chat__item {
   margin-top: 20px;
+}
+
+nav {
+  height: 80px;
+  background-color: whitesmoke;
+  box-shadow: 5px 10px #81b29a inset;
+  height: 70px;
+}
+
+.logo {
+  width: 70px;
+}
+
+.updates {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100vw;
+  height: 100vh;
+}
+
+.updates__item {
+  border-radius: 5px;
+  border-color: gray;
+  margin: 10px, 10px, 10px, 10px;
+  height: 450px;
+  width: 400px;
+}
+
+.updates__item__relation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.updates__item__small-pic {
+  height: 50px;
+  width: 50px;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.updates__item__big-pic {
+  height: 300px;
+  width: 400px;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.friend-button {
+  width: 100px;
+}
+
+.friend-button button {
+  height: 30px;
+  width: 100px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #e07a5f;
+  color: #3d405b;
+}
+
+.others {
+  display: flex;
+  justify-content: space-around;
+}
+
+.others__info {
+  height: 100vh;
+  width: 30vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.others__items {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 60vw;
+}
+
+.his-items {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 60vw;
 }
 
 body {

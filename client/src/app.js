@@ -1,16 +1,17 @@
 import React from "react";
 import axios from "./axios";
 import Avatar from "./avatar";
-import Uploader from "./uploader";
+
 import Profile from "./profile";
 import { Route, BrowserRouter, Link } from "react-router-dom";
 import OtherProfile from "./other-profile";
 import Logout from "./logout";
 import Search from "./search";
 import Friends from "./friends";
-import ItemUpload from './item-upload';
-import ItemViewer from './item-viewer';
-import Chat from './chat'
+import ItemUpload from "./item-upload";
+import ItemViewer from "./item-viewer";
+import Chat from "./chat";
+import Updates from './updates';
 export default class App extends React.Component {
     constructor() {
         super();
@@ -48,12 +49,7 @@ export default class App extends React.Component {
             yourname: result.data.yourname,
         });
 
-        if (!this.state.profilepic) {
-            this.setState({
-                profilepic:
-                    "https://d33epyjwhmr3r5.cloudfront.net/cms/images/sandbox/madhuontap.svg",
-            });
-        }
+         
     }
 
     updateImg(pic) {
@@ -85,37 +81,32 @@ export default class App extends React.Component {
             <div>
                 <BrowserRouter>
                     <nav>
-                        <Search
-                            className="search"
-                            profilepic={this.state.profilepic}
-                            username={this.state.username}
-                            updateImg={this.updateImg}
-                        />
-                        d<ul className="menu-nav">
-                            <Link to="/" className="menu-nav__item">
-                                home
-                            </Link>
-
+                        <ul className="menu-nav">
+                            <div className="menu-nav__item">
+                                <Link to="/">
+                                    <i className="fab fa-cuttlefish"></i>
+                                </Link>
+                            </div>
+                            <Search
+                                className="search"
+                                profilepic={this.state.profilepic}
+                                username={this.state.username}
+                                updateImg={this.updateImg}
+                            />
                             <div
-                                onClick={this.handleSearchToggle}
+                                onClick={this.handleMessageToggle}
                                 className="menu-nav__item"
                             >
-                                messages
+                                MESSENGER
                             </div>
                             <div
-                                onClick={this.handleSearchToggle}
-                                className="menu-nav__item"
+                                className="menu-nav__item logout"
+                                onClick={this.handleLogoutToggle}
                             >
-                                shopping cart
+                                logout
                             </div>
                         </ul>
-                        
-                        <button
-                            className="logout"
-                            onClick={this.handleLogoutToggle}
-                        >
-                            logout
-                        </button>
+
                         {this.state.logoutToggle && (
                             <Logout className="menu-nav__item logout" />
                         )}
@@ -130,18 +121,20 @@ export default class App extends React.Component {
                         )}
                     </nav>
                     <section>
-                        {this.state.uploaderToggle && (
-                            <Uploader
-                                className="zoomAvatar"
-                                profilepic={this.state.profilepic}
-                                username={this.state.username}
-                                updateImg={this.updateImg}
-                            />
-                        )}
-
-                        <Route
+                         
+<Route
                             exact
                             path="/"
+                            render={() => (
+                                <div>
+                                    <Updates
+                                    />
+                                </div>
+                            )}
+                        />
+                        <Route
+                            exact
+                            path="/profile"
                             render={() => (
                                 <div>
                                     <Profile
@@ -150,6 +143,7 @@ export default class App extends React.Component {
                                         bio={this.state.bio}
                                         pic={this.state.profilepic}
                                         updateBio={this.updateBio}
+                                        updateImg ={this.updateImg}
                                         id={this.state.id}
                                     />
                                 </div>
@@ -174,7 +168,6 @@ export default class App extends React.Component {
                                     match={props.match}
                                     history={props.history}
                                 />
-
                             )}
                         />
 
@@ -188,9 +181,9 @@ export default class App extends React.Component {
                             )}
                         />
                         <Route path="/friends" component={Friends} />
-                    
-                    <Route path="/sell" component={ItemUpload} />
-                    <Route path="/chat" component={Chat} />
+
+                        <Route path="/sell" component={ItemUpload} />
+                        <Route path="/chat" component={Chat} />
                     </section>
                     <footer>copyright 2021 © Guitong Li</footer>
                 </BrowserRouter>

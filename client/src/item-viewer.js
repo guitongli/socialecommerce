@@ -24,14 +24,14 @@ export default function ItemViewer(props) {
     
     return (
         <div className="item-viewer">
-            quak
+             
             <p> {data&& data.item_name}</p>
 
             <img className='item-viewer__img' src={data&& data.item_pic} />
             {/* <LikeCounter id={data&& data.id} /> */}
             <div>
                 {data&& data.item_des}
-                <p>{data&& data.item_price},- EUR</p> */}
+                <p>{data&& data.item_price},- EUR</p>
             </div>
             {/* <button onClick={clickBuy}>express counter</button> */}
             {data&& <Link to={"/user/" + data.seller_id}>X</Link>}
