@@ -58,7 +58,7 @@ export default function Updates() {
                             </div>
                             <div className="updates__item__des">
                                 {update.item_name} <p>Price:</p>
-                                {update.item_price}
+                                {update.item_price} ,- Eur
                             </div>
                         </div>
                     );

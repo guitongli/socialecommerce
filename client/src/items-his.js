@@ -28,7 +28,7 @@ export default function HisItems(props) {
                             >
                                 <img className="updates__item__big-pic" src={his_item.item_pic} />
                                 <div>
-                                    <p> {his_item.item_name}</p>
+                                    <h2> {his_item.item_name}</h2>
 
                                     {his_item.item_des}
                                     <p>{his_item.item_price},- EUR</p>

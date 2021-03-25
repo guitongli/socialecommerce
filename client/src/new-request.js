@@ -23,7 +23,7 @@ export default function Alert() {
                     {newRequest && newRequest.username}
                 </h6>
                 <h6>
-                    New Request from
+                    New Message from
                     {newMessage && newMessage.username}
                 </h6>
                 {/* {requests && (

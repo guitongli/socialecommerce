@@ -50,19 +50,22 @@ export default function Search() {
                     {users &&
                         users.map(function (user) {
                             return (
-                                <Link
+                                <div className="search__list-item"
                                     to={{ pathname: `/user/${user.id}` }}
-                                    key={user.id} onClick ={setListInvisible}
-                                >
-                                    <div className="search__list-item">
+                                    key={user.id} onClick ={setListInvisible}>
+                                    <Link>
+                                        
                                         <img
                                             className="middle-picture"
                                             src={user.pic}
-                                        ></img>
+                                        ></img> 
+                                    </Link>
+                                    <h6>
+                                        
                                         {user.username}
                                         {user.yourname}
-                                    </div>
-                                </Link>
+                                    </h6>
+                                </div>
                             );
                         })}
                 </div>

@@ -12,7 +12,7 @@ import ItemUpload from "./item-upload";
 import ItemViewer from "./item-viewer";
 import Chat from "./chat";
 import Updates from "./updates";
-import Alert from './alert';
+import Alert from "./alert";
 
 export default class App extends React.Component {
     constructor() {
@@ -80,11 +80,11 @@ export default class App extends React.Component {
         return (
             <div>
                 <BrowserRouter>
-                    <nav className="menu-nav">
+                    <ul className="menu-nav">
                         <div className="menu-nav__item">
-                            <Link to="/">
+                           
                                 <i className="fab fa-cuttlefish"></i>
-                            </Link>
+                            <Link to="/">irkle </Link>
                         </div>
                         <div className="menu-nav__item">
                             <Search
@@ -93,27 +93,20 @@ export default class App extends React.Component {
                                 updateImg={this.updateImg}
                             />
                         </div>
-                        <button
-                            className="menu-nav__item"
-                            onClick={() => {
-                                location.replace("/chat");
-                            }}
-                        >
-                            Chatroom
-                        </button>
+                        <div className="menu-nav__item">
+                            <button
+                               
+                                onClick={() => {
+                                    location.replace("/chat");
+                                }}
+                            >
+                                Chatroom
+                            </button>
+                        </div>
                         {/* <div className="menu-nav__item alert">
                             <Alert />
                         </div> */}
-
-                        {this.state.avatarToggle && (
-                            <Avatar
-                                className="menu-nav__item avatar"
-                                username={this.state.username}
-                                profilepic={this.state.profilepic}
-                                handleImgClick={this.handleImgClick}
-                                handleAvatarToggle={this.handleAvatarToggle}
-                            />
-                        )}
+                       
                         <div
                             className="menu-nav__item"
                             onClick={this.handleLogoutToggle}
@@ -121,8 +114,23 @@ export default class App extends React.Component {
                             <button>Logout</button>
                         </div>
                         {this.state.logoutToggle && <Logout />}
-                    <Alert/>
-                    </nav>
+                        <div className="menu-nav__item">
+                            
+                            <Alert />
+                        </div>
+                         <div className="menu-nav__item">
+                            {this.state.avatarToggle && (
+                                <Avatar
+                                    className="
+                                 avatar"
+                                    username={this.state.username}
+                                    profilepic={this.state.profilepic}
+                                    handleImgClick={this.handleImgClick}
+                                    handleAvatarToggle={this.handleAvatarToggle}
+                                />
+                            )}
+                        </div>
+                    </ul>
 
                     <section>
                         <Route

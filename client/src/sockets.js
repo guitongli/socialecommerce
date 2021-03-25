@@ -28,12 +28,12 @@ export const init = (store) => {
         socket.on("privateMessage", (msgs) => {
             console.log("private message came", msgs);
             store.dispatch(privateMessage(msgs));
+           
+        });
+        socket.on("message", (msgs) => {
+            console.log("new message came", msgs);
              store.dispatch(notifyMessage(msgs));
         });
-        // socket.on("notifyMessage", (user) => {
-        //     console.log("new message came", user);
-        //     store.dispatch(notifyMessage(user));
-        // });
         socket.on("request", (user) => {
             console.log("new request came", user);
             store.dispatch(notifyRequest(user));

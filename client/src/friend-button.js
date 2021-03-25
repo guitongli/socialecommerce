@@ -19,7 +19,7 @@ export default function FriendButton(props) {
     function handleClick() {
         getStage(props.hisId);
         if (stage == 'add'){
-        socket.emit("request", props.hisId);}
+            socket.emit("request", props.hisId);}
     }
 
     return (

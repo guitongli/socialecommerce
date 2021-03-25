@@ -508,6 +508,12 @@ io.on("connection", function (socket) {
                             io.sockets.sockets
                                 .get(socket_id)
                                 .emit("privateMessage", new_message);
+                            if (onlineUsers[socket_id] == recipient_id) {
+                            console.log('alerting')
+                                io.sockets.sockets
+                                    .get(socket_id)
+                                    .emit("message", new_message);
+                            }
                         }
                     }
                 });
@@ -516,11 +522,12 @@ io.on("connection", function (socket) {
     });
     socket.on("request", function (hisId) {
         db.getId(socket.request.session.userId).then(({ rows }) => {
-            console.log('requester info', rows)
-            const {username, pic} = rows[0];
-            var new_message;
+            console.log("requester info", rows);
+            const { username, pic, id } = rows[0];
+            var new_message={};
             new_message.username = username;
             new_message.pic = pic;
+            new_message.sender_id = id;
 
             for (var socket_id in onlineUsers) {
                 if (onlineUsers[socket_id] == hisId) {
