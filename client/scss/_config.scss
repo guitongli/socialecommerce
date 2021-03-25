@@ -33,3 +33,32 @@ $mobile: 800px;
 @mixin transition-ease {
     transition: all 0.5s ease-in-out;
 }
+
+@mixin big-profile {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    object-position: 50% 50%;
+    border-radius: 50%;
+}
+@mixin small-profile {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    object-position: 50% 50%;
+    border-radius: 50%;
+}
+
+@mixin small-item {
+    height: 200px;
+    width: 200px;
+
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+@mixin big-item {
+    height: 300px;
+    width: 400px;
+    object-fit: cover;
+    object-position: 50% 50%;
+}

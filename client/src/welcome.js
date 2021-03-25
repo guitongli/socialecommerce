@@ -24,6 +24,7 @@ export default function Welcome() {
                     </div>
                 </HashRouter>
             </div>
+            {/* <div><h1>Platform for swapping and sharing</h1></div> */}
         </div>
     );
 }

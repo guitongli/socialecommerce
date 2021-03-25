@@ -40,7 +40,7 @@ export default function Updates() {
                                     />
                                     {update.username} {update.yourname}
                                 </div>
-                                <div>
+                                <div className ='move-left'>
                                     <FriendButton hisId={update.seller_id} />
                                 </div>
                             </div>

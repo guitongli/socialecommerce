@@ -15,7 +15,7 @@ export default class Verification extends React.Component {
         };
     }
     componentDidMount(){
-        if(this.props){
+        if(this.props.email){
             const passedemail= this.props.email;
             this.setState({step: 2, email:passedemail});
             if (this.state.step ==3){
@@ -26,7 +26,7 @@ export default class Verification extends React.Component {
     }
     sendCode() {
         axios
-            .post('/verification/sendemail', this.state.email)
+            .post('/verification/sendemail', {email:this.state.email})
             .then(result => {
                 if (result.data.success) {
                     this.setState({ step: 2 });
@@ -39,7 +39,7 @@ export default class Verification extends React.Component {
             .post('/verification', this.state)
             .then(result => {
                 if (result.data.success) {
-                    if(this.props){this.setState({ step: 4});}
+                    if(this.props.email){this.setState({ step: 4});}
                     else{this.setState({ step: 3 });}
                 }
             })

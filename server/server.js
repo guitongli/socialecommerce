@@ -171,13 +171,19 @@ app.post("/verification/sendemail", (req, res) => {
             if (result.rows[0].count) {
                 db.getEmail(req.body.email)
                     .then(({ rows }) => {
+                        console.log("verifying", rows);
                         s3Email(
-                            rows[0].yourname,
+                            rows[0].username,
                             "guitong.lee.contact@gmail.com",
                             secretCode
-                        ).then(() => {
-                            res.json({ success: true });
-                        });
+                        )
+                            .then(() => {
+                                res.json({ success: true });
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                                res.json({ success: false });
+                            });
 
                         db.insertCode(
                             req.body.email,
@@ -195,7 +201,7 @@ app.post("/verification/sendemail", (req, res) => {
 
 app.post("/verification", (req, res) => {
     console.log(req.body);
-    db.getCode(req.session.userEmail).then(({ rows }) => {
+    db.getCode(req.body.email).then(({ rows }) => {
         console.log(rows);
         console.log(secretCode);
         if (rows[0].code == secretCode) {
@@ -471,7 +477,7 @@ io.on("connection", function (socket) {
                     new_message.yourname = yourname;
                     new_message.pic = pic;
 
-                    socket.emit("chatMessage", new_message);
+                    io.emit("chatMessage", new_message);
                 });
             })
             .catch((err) => console.log(err));
@@ -509,7 +515,7 @@ io.on("connection", function (socket) {
                                 .get(socket_id)
                                 .emit("privateMessage", new_message);
                             if (onlineUsers[socket_id] == recipient_id) {
-                            console.log('alerting')
+                                console.log("alerting");
                                 io.sockets.sockets
                                     .get(socket_id)
                                     .emit("message", new_message);
@@ -524,7 +530,7 @@ io.on("connection", function (socket) {
         db.getId(socket.request.session.userId).then(({ rows }) => {
             console.log("requester info", rows);
             const { username, pic, id } = rows[0];
-            var new_message={};
+            var new_message = {};
             new_message.username = username;
             new_message.pic = pic;
             new_message.sender_id = id;

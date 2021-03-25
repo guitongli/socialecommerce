@@ -12,27 +12,31 @@ export default function FriendButton(props) {
 
     useEffect(function () {
         getStage(props.hisId);
-        
+
         console.log("prop id", props.hisId);
     }, []);
 
     function handleClick() {
         getStage(props.hisId);
-        if (stage == 'add'){
-            socket.emit("request", props.hisId);}
+        if (stage == "add") {
+            socket.emit("request", props.hisId);
+        }
     }
 
     return (
         <div className="friend-button">
-            <button
-                onClick={(e) => {
-                    e.preventDefault();
-                    handleClick();
-                }}
-            >
-                {stage}
-            </button>
-            {stage == "friend" && <Private hisId={props.hisId} />}
+            <div>
+              
+                <button
+                    onClick={(e) => {
+                        e.preventDefault();
+                        handleClick();
+                    }}
+                >
+                    {stage}
+                </button>
+            </div>
+            <div>{stage == "friend" && <Private hisId={props.hisId} />}</div>
         </div>
     );
 }

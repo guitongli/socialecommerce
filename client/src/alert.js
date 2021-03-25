@@ -37,13 +37,7 @@ export default function Alert() {
 
     return (
         <div className="alert">
-            <button
-                onClick={() => {
-                    location.replace("/friends");
-                }}
-            >
-                Friends
-            </button>
+            
             <div className="alert-request">
                 <h6>
                     {newRequest &&

@@ -9,7 +9,6 @@
         object-position: 50% 50%;
     }
     // position: absolute;
-    right: 10%;
 }
 
 .friends {
@@ -43,18 +42,10 @@ footer {
     top: 100%;
 }
 
-.logout {
-    // position: absolute;
-    width: 50vw;
-    height: 20vh;
-    top: 10px;
-    left: -100px;
-}
-
 .relations {
     img {
         height: 150px;
-        width: 130px;
+        width: 10px;
         object-fit: none;
         object-position: 50% 50%;
     }
@@ -88,6 +79,7 @@ footer {
 .my-items {
     background-color: rgba($color: $base-color, $alpha: 0.6);
     border-radius: 10px;
+    z-index: 9;
     &__list {
         display: flex;
         justify-content: space-around;
@@ -135,7 +127,7 @@ footer {
     width: 100vw;
     padding-top: 10px;
     background-color: whitesmoke;
-    box-shadow: 0 8px 6px -6px $zhusha;
+    box-shadow: 0 8px 6px -6px gray;
     height: 70px;
     display: flex;
     align-content: space-around;
@@ -143,7 +135,13 @@ footer {
     margin-bottom: 80px;
     &__item {
         margin-left: 20px;
-        font-size: 30px;
+        font-size: 20px;
+        border-color: black;
+    }
+    .effect {
+        &:hover {
+            border-bottom: 3px $zhusha solid;
+        }
     }
     i {
         font-size: 35px;
@@ -161,6 +159,8 @@ footer {
     width: 100vw;
     overflow-x: hidden;
     justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;
 
     &__item {
         border-radius: 5px;
@@ -220,6 +220,8 @@ footer {
     flex-direction: column;
     justify-content: space-around;
     width: 60vw;
+    background-color: rgba($color: $base-color, $alpha: 0.6);
+    border-radius: 10px;
 }
 
 .mychat {
@@ -236,16 +238,19 @@ footer {
         height: 40vh;
         width: 50vw;
     }
-    &__wrapper {
+    .move-right {
         display: none;
         position: fixed;
         right: 0;
         top: 50vh;
         width: 50vw;
-
+        z-index: 12;
         border-radius: 10px;
         border: 3px gray solic;
-        background-color: rgba($color: #e0d0d0, $alpha: 0.6);
+        background-color: rgba(
+            $color: rgba($color: $base-color, $alpha: 0.8),
+            $alpha: 0.6
+        );
     }
 }
 
@@ -291,15 +296,14 @@ footer {
     object-position: 50% 50%;
 }
 
-.logout {
-    height: 300px;
-    width: 200px;
-    border-radius: 10px;
-    border-color: $zhusha;
-    background-color: rgba($color: $base-color, $alpha: 0.6);
-    position: relative;
-    top: 40px;
-}
+// .logout {
+//     height: 70px;
+//     width: 100px;
+//     border-radius: 10px;
+//     border-color: $zhusha;
+//     background-color: rgba($color: $base-color, $alpha: 0.6);
+//     position: relative;
+// }
 
 .uploader {
 }
@@ -307,3 +311,13 @@ footer {
 .alert-request .alert-message {
     display: none;
 }
+
+.friend-button {
+    display: flex;
+    align-content: space-around;
+    flex-direction: column;
+}
+
+// .move-left {
+//     float: left;
+// }

@@ -4,12 +4,14 @@
     width: 100vw;
     height: 100vw;
     overflow: hidden;
+    display: flex;
+
     background-image: linear-gradient(
         rgba(222, 222, 222, 0.1),
         rgba(233, 233, 233, 0.5)
     );
     // margin: 0 auto;
-    // justify-content: center;
+    justify-content: center;
 
     img {
         position: absolute;
@@ -24,15 +26,16 @@
         display: flex;
         flex-direction: column;
         justify-content: space-around;
+        padding: 10px 0 10px 0;
         font-weight: weight(bold);
         color: $coolnavy;
         position: relative;
         background-color: rgba(253, 253, 233, 0.5);
-        width: 50vw;
+        width: 40vw;
         height: 60vh;
         position: absolute;
         top: 20%;
-        left: 20%;
+        left: 15%;
         h1,
         h4 {
             text-align: center;

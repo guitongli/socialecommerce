@@ -11,7 +11,8 @@ body {
     background: #ededed;
     font-weight: weight(medium);
     color: $coolnavy;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "B612", sans-serif;
+    font-family: "Varela", sans-serif;
 }
 * {
     box-sizing: border-box;
@@ -23,6 +24,9 @@ button {
     border-radius: 5px;
     background-color: $base-color;
     color: $coolnavy;
+    &:hover {
+        border-color: $wallgreen;
+    }
 }
 input {
     height: 30px;
@@ -44,6 +48,7 @@ textarea {
     outline: none;
     margin-right: 20px;
 }
+
 .heart-wrapper {
     padding-top: 50px;
 

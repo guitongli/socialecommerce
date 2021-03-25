@@ -12,7 +12,9 @@ export default function Chat() {
         if (e.key === "Enter") {
             e.preventDefault();
             // console.log('text', e.target.value)
+           
             socket.emit("chatMessage", e.target.value);
+             e.target.value = null;
         }
     };
 
@@ -30,12 +32,12 @@ export default function Chat() {
             elemRef.current.clientHeight
             // newRollTop
         );
-    });
+    },[chatMessages]);
 
     return (
         <>
-            <div className="chat" ref={elemRef}>
-                <div className="chat__wrapper">
+            <div className="chat">
+                <div className="chat__wrapper"  ref={elemRef}>
                     {chatMessages &&
                         // console.log('in element', chatMessages)
                         chatMessages.map((chatMessage) => {

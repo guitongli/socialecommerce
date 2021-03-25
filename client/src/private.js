@@ -1,4 +1,4 @@
-import { useEffect, useRef} from "react";
+import { useEffect, useRef } from "react";
 import { socket } from "./sockets";
 import { useSelector } from "react-redux";
 
@@ -24,11 +24,16 @@ export default function Private(props) {
                 content: e.target.value,
                 hisId: props.hisId,
             });
-             
+
             e.target.value = null;
         }
     };
     const elemRef = useRef();
+    useEffect(()=>{
+         document.getElementsByClassName(
+            `mychat__wrapper__${props.hisId}`
+        )[0].style.display = "none";
+    },[]);
     useEffect(() => {
         elemRef.current.scrollTop =
             elemRef.current.scrollHeight - elemRef.current.clientHeight;
@@ -40,6 +45,7 @@ export default function Private(props) {
 
             // newRollTop
         );
+       
         for (
             var i = 0;
             i < document.getElementsByClassName(props.hisId).length;
@@ -53,15 +59,15 @@ export default function Private(props) {
         }
     }, [hisMessages]);
     var toggleWindow = false;
-    function handleClick() {
+    function handleClick(e) {
         if (toggleWindow == false) {
             document.getElementsByClassName(
-                "mychat__wrapper"
+                `mychat__wrapper__${props.hisId}`
             )[0].style.display = "block";
             toggleWindow = !toggleWindow;
         } else {
             document.getElementsByClassName(
-                "mychat__wrapper"
+                `mychat__wrapper__${props.hisId}`
             )[0].style.display = "none";
             toggleWindow = !toggleWindow;
         }
@@ -72,13 +78,13 @@ export default function Private(props) {
                 <button
                     onClick={(e) => {
                         e.preventDefault();
-                        handleClick();
+                        handleClick(e);
                     }}
                 >
                     chat
                 </button>
             </div>
-            <div className="mychat__wrapper">
+            <div className={`mychat__wrapper__${props.hisId}  move-right`}>
                 <div className="mychat__window" ref={elemRef}>
                     {hisMessages &&
                         // console.log('in element', chatMessages)
@@ -88,6 +94,7 @@ export default function Private(props) {
                                     className={hisMessage.sender_id}
                                     key={hisMessage.pm_id}
                                 >
+                                    
                                     <img src={hisMessage.pic} />
                                     {hisMessage.content}
                                 </div>

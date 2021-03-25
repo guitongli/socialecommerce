@@ -28,10 +28,10 @@ export default class Logout extends React.Component {
 
     render() {
         return (
-            <div className='logout'> 
+            <div onClick={this.handleClick} className='logout'> 
 
-                <h1> do you really want to go? we will miss you.</h1>
-                <button onClick={this.handleClick}>Logout</button>
+                {/* <h6> do you really want to go? we will miss you.</h6> */}
+                 Logout
             </div>
         );
     }

@@ -73,7 +73,7 @@ export default class App extends React.Component {
         this.setState({ avatarToggle: !this.state.avatarToggle }, () => {
             console.log(this.state);
         });
-        location.replace("/logout");
+         
     }
 
     render() {
@@ -82,8 +82,7 @@ export default class App extends React.Component {
                 <BrowserRouter>
                     <ul className="menu-nav">
                         <div className="menu-nav__item">
-                           
-                                <i className="fab fa-cuttlefish"></i>
+                            <i className="fab fa-cuttlefish"></i>
                             <Link to="/">irkle </Link>
                         </div>
                         <div className="menu-nav__item">
@@ -93,32 +92,37 @@ export default class App extends React.Component {
                                 updateImg={this.updateImg}
                             />
                         </div>
-                        <div className="menu-nav__item">
-                            <button
-                               
-                                onClick={() => {
-                                    location.replace("/chat");
-                                }}
-                            >
-                                Chatroom
-                            </button>
+                        <div
+                            className="menu-nav__item effect"
+                            onClick={() => {
+                                location.replace("/chat");
+                            }}
+                        >
+                           Braodcast Room
                         </div>
                         {/* <div className="menu-nav__item alert">
                             <Alert />
                         </div> */}
+
+                        <div
+                            className="menu-nav__item effect"
+                             
+                        >
+                            <Logout />
+                        </div>
                        
                         <div
-                            className="menu-nav__item"
-                            onClick={this.handleLogoutToggle}
+                            className="menu-nav__item effect"
+                            onClick={() => {
+                                location.replace("/friends");
+                            }}
                         >
-                            <button>Logout</button>
+                            Friends
                         </div>
-                        {this.state.logoutToggle && <Logout />}
                         <div className="menu-nav__item">
-                            
                             <Alert />
                         </div>
-                         <div className="menu-nav__item">
+                        <div className="menu-nav__item">
                             {this.state.avatarToggle && (
                                 <Avatar
                                     className="
@@ -130,6 +134,7 @@ export default class App extends React.Component {
                                 />
                             )}
                         </div>
+                          
                     </ul>
 
                     <section>
@@ -195,7 +200,7 @@ export default class App extends React.Component {
                         <Route path="/sell" component={ItemUpload} />
                         <Route path="/chat" component={Chat} />
                     </section>
-                    <footer>copyright 2021 © Guitong Li</footer>
+                    {/* <footer>copyright 2021 © Guitong Li</footer> */}
                 </BrowserRouter>
             </div>
         );
