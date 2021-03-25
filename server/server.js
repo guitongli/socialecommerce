@@ -304,7 +304,11 @@ app.get("/friend/:method/:hisId", (req, res) => {
         db.checkFriendship(yourId, hisId)
             .then(({ rows }) => {
                 if (!rows[0]) {
-                    res.json({ stage: "add" });
+                    if (yourId == hisId) {
+                        res.json({ stage: "you" });
+                    } else {
+                        res.json({ stage: "add" });
+                    }
                 } else {
                     console.log(rows[0]);
                     if (
@@ -431,7 +435,8 @@ io.on("connection", function (socket) {
         return socket.disconnect(true);
     } else {
         onlineUsers[socket.id] = socket.request.session.userId;
-        io.emit("usersOnline", onlineUsers);
+        const userIDs = Object.values(onlineUsers);
+        io.emit("usersOnline", userIDs);
     }
     db.getMessages().then(({ rows }) => {
         socket.emit("chatMessages", {
@@ -439,12 +444,14 @@ io.on("connection", function (socket) {
         });
     });
 
-    db.getPM(socket.request.session.userId).then(({ rows }) => {
-        console.log("retrieved private messages", rows);
-        io.sockets.sockets.get(socket.id).emit("privateMessages", {
-            private_messages: rows,
-        });
-    }).catch(err=>console.log(err));
+    db.getPM(socket.request.session.userId)
+        .then(({ rows }) => {
+            console.log("retrieved private messages", rows);
+            io.sockets.sockets.get(socket.id).emit("privateMessages", {
+                private_messages: rows,
+            });
+        })
+        .catch((err) => console.log(err));
     socket.on("chatMessage", function (content) {
         const user_id = socket.request.session.userId;
         console.log(user_id);
@@ -473,16 +480,17 @@ io.on("connection", function (socket) {
     socket.on("privateMessage", function (data) {
         const { hisId, content } = data;
         const myId = socket.request.session.userId;
-        console.log(myId);
+
         const new_message = {};
 
         db.savePM(myId, hisId, content)
             .then(({ rows }) => {
-                const { sender_id, recipient_id, content } = rows[0];
+                const { sender_id, recipient_id, content, id } = rows[0];
 
                 new_message.content = content;
                 new_message.sender_id = sender_id;
                 new_message.recipient_id = recipient_id;
+                new_message.pm_id = id;
 
                 db.getId(sender_id).then(({ rows }) => {
                     const { username, yourname, pic } = rows[0];
@@ -490,9 +498,13 @@ io.on("connection", function (socket) {
                     new_message.username = username;
                     new_message.yourname = yourname;
                     new_message.pic = pic;
-
+                    console.log("private message inhalt", new_message);
                     for (var socket_id in onlineUsers) {
-                        if (onlineUsers[socket_id] == recipient_id || sender_id) {
+                        if (
+                            onlineUsers[socket_id] == recipient_id ||
+                            onlineUsers[socket_id] == sender_id
+                        ) {
+                            console.log(socket_id, onlineUsers[socket_id]);
                             io.sockets.sockets
                                 .get(socket_id)
                                 .emit("privateMessage", new_message);
@@ -502,10 +514,28 @@ io.on("connection", function (socket) {
             })
             .catch((err) => console.log(err));
     });
+    socket.on("request", function (hisId) {
+        db.getId(socket.request.session.userId).then(({ rows }) => {
+            console.log('requester info', rows)
+            const {username, pic} = rows[0];
+            var new_message;
+            new_message.username = username;
+            new_message.pic = pic;
 
+            for (var socket_id in onlineUsers) {
+                if (onlineUsers[socket_id] == hisId) {
+                    console.log(socket_id, onlineUsers[socket_id]);
+                    io.sockets.sockets
+                        .get(socket_id)
+                        .emit("request", new_message);
+                }
+            }
+        });
+    });
     socket.on("disconnect", () => {
         console.log("disconnected", socket.id);
         delete onlineUsers[socket.id];
-        io.emit("usersOnline", onlineUsers);
+        const userIDs = Object.values(onlineUsers);
+        io.emit("usersOnline", userIDs);
     });
 });

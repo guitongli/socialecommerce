@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 // import axios from "./axios";
 import { useStage } from "./useStage";
+import Private from "./private";
+import { socket } from "./sockets";
 
 export default function FriendButton(props) {
     const [stage, getStage] = useStage();
@@ -10,11 +12,14 @@ export default function FriendButton(props) {
 
     useEffect(function () {
         getStage(props.hisId);
+        
         console.log("prop id", props.hisId);
     }, []);
 
     function handleClick() {
         getStage(props.hisId);
+        if (stage == 'add'){
+        socket.emit("request", props.hisId);}
     }
 
     return (
@@ -27,6 +32,7 @@ export default function FriendButton(props) {
             >
                 {stage}
             </button>
+            {stage == "friend" && <Private hisId={props.hisId} />}
         </div>
     );
 }

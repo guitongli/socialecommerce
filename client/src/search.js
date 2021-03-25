@@ -52,11 +52,11 @@ export default function Search() {
                             return (
                                 <Link
                                     to={{ pathname: `/user/${user.id}` }}
-                                    key={user.id}
+                                    key={user.id} onClick ={setListInvisible}
                                 >
                                     <div className="search__list-item">
                                         <img
-                                            className="search__list-item__img"
+                                            className="middle-picture"
                                             src={user.pic}
                                         ></img>
                                         {user.username}

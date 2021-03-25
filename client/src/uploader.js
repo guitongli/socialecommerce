@@ -51,17 +51,19 @@ export default class Uploader extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className='uploader'>
                 {/* {this.state.error && <ErrorMsg />} */}
 
-                <img src={this.state.pic} />
+                
                 <input
                     type="file"
                     name="file"
                     accept="image/*"
                     onChange={(e) => this.handleChange(e)}
                 />
-                <button onClick={() => this.handleClick()}>upload</button>
+                
+                <button onClick={() => this.handleClick()}>Update Image</button>
+           
             </div>
         );
     }

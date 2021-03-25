@@ -111,7 +111,7 @@ export function chatMessage(msg) {
 
 export async function getUpdates() {
     const { data } = await axios.get(`/items/updates`);
-    console.log('served updates', data)
+    console.log('served updates', data);
     return {
         type: "GET_UPDATES",
 
@@ -131,5 +131,19 @@ export function privateMessage(msg) {
         type: "PRIVATE_MESSAGE",
 
         msg,
+    };
+}
+export function notifyMessage(user) {
+    return {
+        type: "NOTIFY_MESSAGE",
+
+        user,
+    };
+}
+export function notifyRequest(user) {
+    return {
+        type: "NOTIFY_REQUEST",
+
+        user,
     };
 }

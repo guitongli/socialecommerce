@@ -1,5 +1,4 @@
 export default function Reducer(state = {}, action) {
-    console.log("reducer running");
     if (action.type == "GET_RELATIONS") {
         state = {
             ...state,
@@ -13,7 +12,7 @@ export default function Reducer(state = {}, action) {
         state = {
             ...state,
             relations: state.relations.map((relation) => {
-                if (relation.id == action.hisId) {
+                if (relation.user_id == action.hisId) {
                     console.log("found the right one");
                     return {
                         ...relation,
@@ -29,7 +28,7 @@ export default function Reducer(state = {}, action) {
         state = {
             ...state,
             relations: state.relations.map((relation) => {
-                if (relation.id == action.hisId) {
+                if (relation.user_id == action.hisId) {
                     console.log("found the right one");
                     return {
                         ...relation,
@@ -114,6 +113,7 @@ export default function Reducer(state = {}, action) {
         return state;
     }
     if (action.type == "PRIVATE_MESSAGES") {
+        console.log("private putin state", action.msgs);
         state = {
             ...state,
             private_messages: action.msgs,
@@ -130,11 +130,25 @@ export default function Reducer(state = {}, action) {
         return state;
     }
     if (action.type == "GET_UPDATES") {
-        console.log("reducer got update", action.updates);
-
         state = {
             ...state,
             updates: action.updates,
+        };
+
+        return state;
+    }
+    if (action.type == "NOTIFY_MESSAGE") {
+        state = {
+            ...state,
+            new_message: action.user,
+        };
+
+        return state;
+    }
+    if (action.type == "NOTIFY_REQUEST") {
+        state = {
+            ...state,
+            new_request: action.user,
         };
 
         return state;

@@ -11,7 +11,9 @@ import Friends from "./friends";
 import ItemUpload from "./item-upload";
 import ItemViewer from "./item-viewer";
 import Chat from "./chat";
-import Updates from './updates';
+import Updates from "./updates";
+import Alert from './alert';
+
 export default class App extends React.Component {
     constructor() {
         super();
@@ -48,8 +50,6 @@ export default class App extends React.Component {
             username: result.data.username,
             yourname: result.data.yourname,
         });
-
-         
     }
 
     updateImg(pic) {
@@ -80,36 +80,31 @@ export default class App extends React.Component {
         return (
             <div>
                 <BrowserRouter>
-                    <nav>
-                        <ul className="menu-nav">
-                            <div className="menu-nav__item">
-                                <Link to="/">
-                                    <i className="fab fa-cuttlefish"></i>
-                                </Link>
-                            </div>
+                    <nav className="menu-nav">
+                        <div className="menu-nav__item">
+                            <Link to="/">
+                                <i className="fab fa-cuttlefish"></i>
+                            </Link>
+                        </div>
+                        <div className="menu-nav__item">
                             <Search
-                                className="search"
                                 profilepic={this.state.profilepic}
                                 username={this.state.username}
                                 updateImg={this.updateImg}
                             />
-                            <div
-                                onClick={this.handleMessageToggle}
-                                className="menu-nav__item"
-                            >
-                                MESSENGER
-                            </div>
-                            <div
-                                className="menu-nav__item logout"
-                                onClick={this.handleLogoutToggle}
-                            >
-                                logout
-                            </div>
-                        </ul>
+                        </div>
+                        <button
+                            className="menu-nav__item"
+                            onClick={() => {
+                                location.replace("/chat");
+                            }}
+                        >
+                            Chatroom
+                        </button>
+                        {/* <div className="menu-nav__item alert">
+                            <Alert />
+                        </div> */}
 
-                        {this.state.logoutToggle && (
-                            <Logout className="menu-nav__item logout" />
-                        )}
                         {this.state.avatarToggle && (
                             <Avatar
                                 className="menu-nav__item avatar"
@@ -119,16 +114,23 @@ export default class App extends React.Component {
                                 handleAvatarToggle={this.handleAvatarToggle}
                             />
                         )}
+                        <div
+                            className="menu-nav__item"
+                            onClick={this.handleLogoutToggle}
+                        >
+                            <button>Logout</button>
+                        </div>
+                        {this.state.logoutToggle && <Logout />}
+                    <Alert/>
                     </nav>
+
                     <section>
-                         
-<Route
+                        <Route
                             exact
                             path="/"
                             render={() => (
                                 <div>
-                                    <Updates
-                                    />
+                                    <Updates />
                                 </div>
                             )}
                         />
@@ -143,7 +145,7 @@ export default class App extends React.Component {
                                         bio={this.state.bio}
                                         pic={this.state.profilepic}
                                         updateBio={this.updateBio}
-                                        updateImg ={this.updateImg}
+                                        updateImg={this.updateImg}
                                         id={this.state.id}
                                     />
                                 </div>

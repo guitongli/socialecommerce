@@ -18,23 +18,25 @@ export default function Friends() {
     const requests = useSelector((state) => {
         return (
             state.relations &&
-            state.relations.filter((relation) => !relation.accepted)
+            state.relations.filter((relation) => relation.accepted==false)
         );
     });
 
     useEffect(() => {
-        dispatch(getRelations());
+        dispatch(getRelations()); 
     }, []);
  
 
     return (
         <div className="relations">
+            <h1>Friends</h1>
             <div className="friends">
+                
                 {friends &&
                     friends.map(function (friend) {
                         return (
                             <div className="friends__item" key={friend.id}>
-                                <Link to={{ pathname: `/user/${friend.id}` }}>
+                                <Link to={{ pathname: `/user/${friend.user_id}` }}>
                                     {friend.username} <p>{friend.yourname}</p>
                                     <img
                                         className="friends__item__img"
@@ -43,7 +45,7 @@ export default function Friends() {
                                 </Link>
                                 <button
                                     onClick={() =>
-                                        dispatch(deleteRelation(friend.id))
+                                        dispatch(deleteRelation(friend.user_id))
                                     }
                                 >
                                     delete
@@ -52,8 +54,9 @@ export default function Friends() {
                         );
                     })}
             </div>
+            <div><h1>People waiting</h1></div>
             <div className="requests">
-                <h1>People waiting</h1>
+                
                 {requests &&
                     requests.map(function (request) {
                         return (
@@ -65,14 +68,14 @@ export default function Friends() {
                                 />
                                 <button
                                     onClick={() =>
-                                        dispatch(acceptRequest(request.id))
+                                        dispatch(acceptRequest(request.sender_id))
                                     }
                                 >
                                     accept
                                 </button>
                                 <button
                                     onClick={() =>
-                                        dispatch(deleteRelation(request.id))
+                                        dispatch(deleteRelation(request.sender_id))
                                     }
                                 >
                                     delete

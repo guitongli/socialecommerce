@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import axios from "./axios";
-import { getMyItems, updateClickedItem } from "./actions";
+import { getMyItems } from "./actions";
 
 export default function MyItems() {
     const dispatch = useDispatch();
@@ -19,21 +19,21 @@ export default function MyItems() {
                 {my_items &&
                     my_items.map(function (my_item) {
                         return (
-                            <div
-                                className="my-item"
-                                key={my_item.id}
-                                onClick={() => {
-                                    location.replace(`/marketplace/${my_item.id}`);
-                                }}
-                            >
-                                <img src={my_item.item_pic} />
-                                <div>
-                                    <p> {my_item.item_name}</p>
-
-                                    {my_item.item_des}
-                                    <p>{my_item.item_price},- EUR</p>
-                                </div> 
+                            <div className="my-item" key={my_item.id}>
                                 
+                                <img
+                                    onClick={() => {
+                                        location.replace(
+                                            `/marketplace/${my_item.id}`
+                                        );
+                                    }}
+                                    src={my_item.item_pic}
+                                />
+
+                                <h1> {my_item.item_name}</h1>
+
+                                {my_item.item_des}
+                                <h2>{my_item.item_price},- EUR</h2>
                             </div>
                         );
                     })}

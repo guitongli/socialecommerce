@@ -11,30 +11,38 @@ export default function ItemViewer(props) {
     const currentItemId = props.match.params.id;
     const dispatch = useDispatch();
     const data = useSelector((state) => {
-        return (state &&state.current_item_info);
+        return state && state.current_item_info;
     });
-    
-    console.log(data)
+
+    console.log(data);
     useEffect(function () {
         dispatch(getItemInfo(currentItemId));
-    },[]);
-// {id, item_des, item_name, item_pic, item_price, seller_id}
-    
+    }, []);
+    // {id, item_des, item_name, item_pic, item_price, seller_id}
+
     // function clickBuy() {}
-    
+
     return (
         <div className="item-viewer">
-             
-            <p> {data&& data.item_name}</p>
-
-            <img className='item-viewer__img' src={data&& data.item_pic} />
-            {/* <LikeCounter id={data&& data.id} /> */}
             <div>
-                {data&& data.item_des}
-                <p>{data&& data.item_price},- EUR</p>
+                <h1> {data && data.item_name}</h1>
+
+                <img className="item-viewer__img" src={data && data.item_pic} />
+                {/* <LikeCounter id={data&& data.id} /> */}
+                <div>
+                    {data && data.item_des}
+                    <p>{data && data.item_price},- EUR</p>
+                </div>
             </div>
             {/* <button onClick={clickBuy}>express counter</button> */}
-            {data&& <Link to={"/user/" + data.seller_id}>X</Link>}
+            <div>
+                {data && (
+                    <Link to={"/user/" + data.seller_id}>
+                        See Owner Profile
+                    </Link>
+                )}
+                
+            </div>
         </div>
     );
 }

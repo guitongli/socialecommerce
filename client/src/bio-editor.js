@@ -35,12 +35,13 @@ export default function BioEditor(props) {
     } else {
         if (props.oldbio) {
             return (
-                <div>
-                    <button onClick={toggleArea}>edit</button>
-                </div>
+                <button onClick={toggleArea}>
+                     Edit Bio
+                </button>
             );
         } else {
-            return <button onClick={toggleArea}>add</button>;
+            return (<button onClick={toggleArea}>
+                    Add Bio</button>);
         }
     }
 }

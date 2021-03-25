@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import axios from "./axios";
+import { useEffect } from "react";
+// import axios from "./axios";
 import { useDispatch, useSelector } from "react-redux";
 // import axios from "./axios";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 import { getUpdates } from "./actions";
 import FriendButton from "./friend-button";
@@ -30,7 +30,7 @@ export default function Updates() {
                             <div className="updates__item__relation">
                                 <div>
                                     <img
-                                        className="updates__item__small-pic"
+                                        className="small-picture"
                                         src={update.pic}
                                         onClick={() => {
                                             location.replace(
@@ -41,7 +41,6 @@ export default function Updates() {
                                     {update.username} {update.yourname}
                                 </div>
                                 <div>
-                                    
                                     <FriendButton hisId={update.seller_id} />
                                 </div>
                             </div>
@@ -53,13 +52,13 @@ export default function Updates() {
                                 }}
                             >
                                 <img
-                                    className="updates__item__big-pic"
+                                    className="middle-item-pic"
                                     src={update.item_pic}
                                 />
                             </div>
-                            <div>
-                                {update.item_name} <p>Price:</p> 
-                                {update.item_price} 
+                            <div className="updates__item__des">
+                                {update.item_name} <p>Price:</p>
+                                {update.item_price}
                             </div>
                         </div>
                     );

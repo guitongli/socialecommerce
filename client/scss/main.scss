@@ -16,7 +16,34 @@ body {
 * {
     box-sizing: border-box;
 }
-
+button {
+    height: 30px;
+    width: 100px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: $base-color;
+    color: $coolnavy;
+}
+input {
+    height: 30px;
+    width: 200px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: $base-color;
+    color: $coolnavy;
+    outline: none;
+    margin-right: 20px;
+}
+textarea {
+    height: 50px;
+    width: 200px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: $base-color;
+    color: $coolnavy;
+    outline: none;
+    margin-right: 20px;
+}
 .heart-wrapper {
     padding-top: 50px;
 

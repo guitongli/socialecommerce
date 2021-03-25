@@ -141,12 +141,12 @@ module.exports.acceptFriendship = (yourId, hisId) => {
 };
 
 module.exports.getRelations = (yourId) => {
-    const q = `SELECT users.id, users.username, users.yourname, users.pic, friendships.accepted, friendships.recipient_id, friendships.sender_id
+    const q = `SELECT friendships.id, users.id AS user_id, users.username, users.yourname, users.pic, friendships.accepted, friendships.recipient_id, friendships.sender_id
     FROM friendships
     JOIN users
     ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
      OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
-    OR (accepted = true AND sender_id = $1 AND sender_id = users.id);`;
+    OR (accepted = true AND sender_id = $1 AND recipient_id = users.id);`;
     const params = [yourId];
     return db.query(q, params);
 };
@@ -233,10 +233,9 @@ module.exports.getPM = (myId) => {
     const q = `SELECT users.id, pm.sender_id, pm.created_at, pm.recipient_id, users.pic, users.username, users.yourname, pm.content, pm.id AS pm_id
     FROM pm
     JOIN users
-    ON (pm.sender_id=$1 AND pm.recipient_id=users.id)
+    ON (pm.sender_id= $1 AND pm.sender_id = users.id)
     OR (pm.recipient_id = $1 AND pm.sender_id = users.id) 
-    ORDER by pm.created_at DESC
-    LIMIT 10;`;
+    ORDER BY pm_id DESC;`;
     // const q =`SELECT TOP 10 * FROM Table ORDER BY ID DESC;`;
     const params = [myId];
     return db.query(q, params);

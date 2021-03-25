@@ -44,7 +44,7 @@ export default function Chat() {
                                     className="chat__item"
                                     key={chatMessage.id}
                                 >
-                                    {chatMessage.username}
+                                    <div>{chatMessage.username}</div>
                                     <img src={chatMessage.pic} />
                                     {chatMessage.content}
                                 </div>

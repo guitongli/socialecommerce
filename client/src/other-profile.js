@@ -3,7 +3,7 @@ import axios from "./axios";
 // import { Link } from "react-router-dom";
 import FriendButton from "./friend-button";
 import HisItems from "./items-his";
-import Private from "./private";
+// import Private from "./private";
 export default class OtherProfile extends React.Component {
     constructor(props) {
         super(props);
@@ -64,7 +64,6 @@ export default class OtherProfile extends React.Component {
                     <h1>{this.state.username}'s Collection</h1>
                     <HisItems hisId={this.props.match.params.id} />
                 </div>
-                <Private hisId={this.props.match.params.id} />
             </div>
         );
     }
